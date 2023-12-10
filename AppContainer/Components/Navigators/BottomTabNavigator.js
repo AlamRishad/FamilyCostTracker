@@ -1,13 +1,19 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { Dimensions, Text, View } from "react-native";
+import { Dimensions, Text, View ,StyleSheet} from "react-native";
 import HomeScreen from "../../Screens/HomeScreen";
 import { CardStyleInterpolators } from "@react-navigation/stack";
-import HomeIcon from "../../../assets/BottomNavBar/homeIcon"
+import HomeIcon from "../../../assets/BottomNavBar/homeIcon";
+import HomeIcondis from "../../../assets/BottomNavBar/homeIconDis";
+import ExpenseIcon from "../../../assets/BottomNavBar/expenseIcon";
+import ExpenseIconDis from "../../../assets/BottomNavBar/expenseIconDis";
+import ReportIcon from "../../../assets/BottomNavBar/reportIcon";
+import ReportIconDis from "../../../assets/BottomNavBar/reportIcondis";
+import SettingsIcon from "../../../assets/BottomNavBar/settingsIcon";
+import SettingsIconDis from "../../../assets/BottomNavBar/settingsIconDis";
 
-
-
-const windowHeight = Dimensions.get("window").height;
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 const Tab = createBottomTabNavigator();
 
 
@@ -15,151 +21,120 @@ const Tab = createBottomTabNavigator();
 const BottomTabNavigator = () => {
 	return (
 		<Tab.Navigator
-			initialRouteName="newProblem"
-			screenOptions={{
-				headerShown: false,
-				gestureEnabled: true,
-				gestureDirection: "horizontal",
-				
-				cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-				tabBarStyle: {
-					borderTopLeftRadius: 20,
-					borderTopRightRadius: 20,
-					backgroundColor: "#EFF3FB",
-					height: windowHeight * 0.09,
-					paddingBottom: windowHeight * 0.017,
-					paddingTop: windowHeight * 0.01,
-					elevation: 20,
-					shadowColor: "#000000",
-					shadowOpacity: 0.14, // set shadow opacity
-					shadowRadius: 19,
+      initialRouteName="newProblem"
+      screenOptions={{
 
-					borderTop: 1,
-					borderColor: "#D3D3D3",
-					borderTopWidth: 1,
-					borderLeftWidth: 1,
-					borderRightWidth: 1,
-					shadowOffset: {
-						width: 0,
-						height: 2,
-					},
-					shadowOpacity: 0.25,
-					shadowRadius: 4,
-					elevation: 5,
-				},
-
-				tabBarBackground: () => (
-					<View
-						style={{
-							shadowOffset: { width: 1, height: 1 },
-							shadowColor: "gray",
-							shadowRadius: 10,
-						}}
-					/>
-				),
-			}}
-		>
+        headerShown: false,
+        gestureEnabled: true,
+        gestureDirection: "horizontal",
+        cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        tabBarStyle: styles.tabBarContainer,
+      }}
+    >
+      <Tab.Screen
+        name="home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: ({ focused }) => (
+            <Text style={[styles.tabLabel, { color: focused ? "#205578" : "#ffffff" }]}>
+              Home
+            </Text>
+          ),
+          tabBarIcon: ({ focused }) => (
+            <View style={[styles.tabItem, focused && styles.tabThings]}>
+              {focused ? <HomeIcon/> : <HomeIcondis/>}
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="newProblem"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: ({ focused }) => (
+            <Text style={[styles.tabLabel, { color: focused ? "#205578" : "#ffffff" }]}>
+              Expenses
+            </Text>
+          ),
+          tabBarIcon: ({ focused }) => (
+            <View style={[styles.tabItem, focused && styles.tabThings]}>
+               {focused ? <ExpenseIcon/> : <ExpenseIconDis/>}
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="newProblem2"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: ({ focused }) => (
+            <Text style={[styles.tabLabel, { color: focused ? "#205578" : "#ffffff" }]}>
+              Report
+            </Text>
+          ),
+          tabBarIcon: ({ focused }) => (
+            <View style={[styles.tabItem, focused && styles.tabThings]}>
+              {focused ? <ReportIcon/> : <ReportIconDis/>}
+            </View>
+          ),
+        }}
+      />
 			<Tab.Screen
-				name="home"
-				component={HomeScreen}
-				options={{
-					tabBarLabel: ({ focused }) => (
-						<Text
-							style={{
-								color: focused ? "#387BE5" : "#000000",
-								fontSize: 11,
-							}}
-						>
-							হোম
-						</Text>
-					),
-					tabBarIcon: ({ focused }) => (
-						<View
-							style={{
-								flex: 1,
-								alignItems: "center",
-								justifyContent: "center",
-								width: "100%",
-								// height: "90%",
-							}}
-						>
-							{/* {focused ? <HomeIcon /> : <HomeIcondisable />} */}
-                            {focused ? <HomeIcon/> : <HomeIcon/>}
-						</View>
-					),
-				}}
-			/>
-			<Tab.Screen
-				name="newProblem"
-				component={HomeScreen}
-				options={{
-					tabBarLabel: ({ focused }) => (
-						<Text
-							style={{
-								color: focused ? "#387BE5" : "#000000",
-								fontSize: 11,
-							}}
-						>
-							নতুন সমস্যা
-						</Text>
-					),
-					tabBarIcon: ({ focused }) => (
-						<View
-							style={{
-								flex: 1,
-								alignItems: "center",
-								justifyContent: "center",
-								width: "100%",
-								// height: "90%",
-							}}
-						>
-							{/* {focused ? (
-								<NewProblemIcon />
-							) : (
-								<NewProblemIcondis />
-							)} */}
-                            {focused ? <HomeIcon/> : <HomeIcon/>}
-						</View>
-					),
-				}}
-			/>
-			<Tab.Screen
-				name="allProblems"
-				component={HomeScreen}
-				options={{
-					tabBarLabel: ({ focused }) => (
-						<Text
-							style={{
-								color: focused ? "#387BE5" : "#000000",
-								fontSize: 11,
-							}}
-						>
-							সমস্যাসমূহ
-						</Text>
-					),
-					tabBarIcon: ({ focused }) => (
-						<View
-							style={{
-								paddingTop: 2,
-								flex: 1,
-								alignItems: "center",
-								justifyContent: "center",
-								width: "100%",
-								// height: "90%",
-							}}
-						>
-							{/* {focused ? (
-								<ProblemDetailsIcon />
-							) : (
-								<ProblemDetailsIcondis />
-							)} */}
-                           {focused ? <HomeIcon/> : <HomeIcon/>}
-						</View>
-					),
-				}}
-			/>
+        name="newProblem3"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: ({ focused }) => (
+            <Text style={[styles.tabLabel, { color: focused ? "#205578" : "#ffffff" }]}>
+              Settings
+            </Text>
+          ),
+          tabBarIcon: ({ focused }) => (
+            <View style={[styles.tabItem, focused && styles.tabThings]}>
+              {focused ? <SettingsIcon/> : <SettingsIconDis/>}
+            </View>
+          ),
+        }}
+      />
 		</Tab.Navigator>
 	);
 };
+const styles = StyleSheet.create({
+    tabBarContainer: {
+      backgroundColor: "#205578",
+      borderTopLeftRadius: width * 0.035,
+      borderTopRightRadius: width * 0.035,
+      flexDirection: "row",
+      alignItems: "center",
+      borderTopWidth: 1,
+      borderTopColor: "gray",
+      elevation: 10,
+      height: height * 0.09,
+      paddingBottom: height * 0.005,
+    },
+    tabItem: {
+        display:"flex",
+        flexDirection:"column",
+      alignItems: "center",
+      marginTop:height*0.03,
+      height:height*0.055,
+      width:width*0.2,
+    },
+    tabLabel: {
+      fontWeight:"bold",
+      fontSize: 10,
+      paddingTop:18,
+    },
+    tabThings: {
+      alignItems: "center",
+      backgroundColor: "white",
+      paddingTop: width * 0.005,
+      paddingBottom: width * 0.001,
+      paddingLeft: width * 0.05,
+      paddingRight: width * 0.05,
+      borderRadius: width * 0.04,
+      marginTop:height*0.03,
+      
+    },
+  });
 
 export default BottomTabNavigator;
