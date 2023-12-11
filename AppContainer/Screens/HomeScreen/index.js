@@ -5,7 +5,10 @@ import {
 	StyleSheet,
 	View,Text,
 } from "react-native";
+import TopBar from "../../Components/CommonComponent/TopBar";
+import AllAddMember from "../../Components/HomePage/AddMember";
 
+import { globalStyle } from "../../utils/globalStyle.js";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -15,10 +18,11 @@ export default function Index() {
 
 
 	return (
-		<SafeAreaView style={[styles.container]}>
+		<SafeAreaView style={[globalStyle.container,styles.container]}>
 			
 					<View>
-					<Text>hello</Text>
+					<TopBar></TopBar>
+					<AllAddMember></AllAddMember>
 					</View>
 				
 			
@@ -31,7 +35,7 @@ export default function Index() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingHorizontal: 15,
+		// paddingHorizontal: 15,
 	},
 	scrollableViewContainer: {
 	},
