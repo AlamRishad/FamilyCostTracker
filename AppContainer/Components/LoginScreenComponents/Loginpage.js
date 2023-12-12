@@ -21,11 +21,37 @@ const Loginpage = () => {
 
   const [passwordX, setPasswordX] = useState(0);
   const [passwordY, setPasswordY] = useState(0);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const navigation = useNavigation();
 
-  const handleLoginPress = () => {
+  const handleLoginPress = async () => {
     navigation.navigate("MainApp");
+    // try {
+    //   console.log(email, password);
+    //   const response = await fetch("https://Localhost:7285/Login", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //       email: email,
+    //       passwordHash: password,
+    //     }),
+    //   });
+
+    //   console.log(email);
+    //   if (response.ok) {
+    //     const responseBody = await response.text();
+    //     console.log("Response Body:", responseBody);
+    //     navigation.navigate("MainApp");
+    //   } else {
+    //     console.error("Login failed:", response.status);
+    //   }
+    // } catch (error) {
+    //   console.error("Error:", error);
+    // }
   };
 
   const passwordInputRef = useRef(null);
@@ -88,7 +114,12 @@ const Loginpage = () => {
           />
         </View>
         <Text style={styles.title}>Login</Text>
-        <TextInput style={styles.input} placeholder="Enter your phone number" />
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your email"
+          onChangeText={setEmail}
+          value={email}
+        />
         <TextInput
           onLayout={(event) => {
             const layout = event.nativeEvent.layout;
@@ -97,6 +128,9 @@ const Loginpage = () => {
           }}
           style={styles.input}
           placeholder="Enter your password "
+          onChangeText={setPassword}
+          value={password}
+          secureTextEntry={true}
           onFocus={() => {
             scrollViewRef.current.scrollTo({
               x: passwordX,
