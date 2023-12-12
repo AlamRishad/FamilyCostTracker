@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import { Dimensions, Text, View ,StyleSheet} from "react-native";
+import { Dimensions, Text, View, StyleSheet } from "react-native";
 import HomeScreen from "../../Screens/HomeScreen";
 import { CardStyleInterpolators } from "@react-navigation/stack";
 import HomeIcon from "../../../assets/BottomNavBar/homeIcon";
@@ -16,14 +16,11 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const Tab = createBottomTabNavigator();
 
-
-
 const BottomTabNavigator = () => {
-	return (
-		<Tab.Navigator
+  return (
+    <Tab.Navigator
       initialRouteName="newProblem"
       screenOptions={{
-
         headerShown: false,
         gestureEnabled: true,
         gestureDirection: "horizontal",
@@ -36,13 +33,18 @@ const BottomTabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: ({ focused }) => (
-            <Text style={[styles.tabLabel, { color: focused ? "#205578" : "#ffffff" }]}>
+            <Text
+              style={[
+                styles.tabLabel,
+                { color: focused ? "#205578" : "#ffffff" },
+              ]}
+            >
               Home
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
             <View style={[styles.tabItem, focused && styles.tabThings]}>
-              {focused ? <HomeIcon/> : <HomeIcondis/>}
+              {focused ? <HomeIcon /> : <HomeIcondis />}
             </View>
           ),
         }}
@@ -52,13 +54,18 @@ const BottomTabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: ({ focused }) => (
-            <Text style={[styles.tabLabel, { color: focused ? "#205578" : "#ffffff" }]}>
+            <Text
+              style={[
+                styles.tabLabel,
+                { color: focused ? "#205578" : "#ffffff" },
+              ]}
+            >
               Expenses
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
             <View style={[styles.tabItem, focused && styles.tabThings]}>
-               {focused ? <ExpenseIcon/> : <ExpenseIconDis/>}
+              {focused ? <ExpenseIcon /> : <ExpenseIconDis />}
             </View>
           ),
         }}
@@ -68,73 +75,82 @@ const BottomTabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: ({ focused }) => (
-            <Text style={[styles.tabLabel, { color: focused ? "#205578" : "#ffffff" }]}>
+            <Text
+              style={[
+                styles.tabLabel,
+                { color: focused ? "#205578" : "#ffffff" },
+              ]}
+            >
               Report
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
             <View style={[styles.tabItem, focused && styles.tabThings]}>
-              {focused ? <ReportIcon/> : <ReportIconDis/>}
+              {focused ? <ReportIcon /> : <ReportIconDis />}
             </View>
           ),
         }}
       />
-			<Tab.Screen
+      <Tab.Screen
         name="newProblem3"
         component={HomeScreen}
         options={{
           tabBarLabel: ({ focused }) => (
-            <Text style={[styles.tabLabel, { color: focused ? "#205578" : "#ffffff" }]}>
+            <Text
+              style={[
+                styles.tabLabel,
+                { color: focused ? "#205578" : "#ffffff" },
+              ]}
+            >
               Settings
             </Text>
           ),
           tabBarIcon: ({ focused }) => (
             <View style={[styles.tabItem, focused && styles.tabThings]}>
-              {focused ? <SettingsIcon/> : <SettingsIconDis/>}
+              {focused ? <SettingsIcon /> : <SettingsIconDis />}
             </View>
           ),
         }}
       />
-		</Tab.Navigator>
-	);
+    </Tab.Navigator>
+  );
 };
 const styles = StyleSheet.create({
-    tabBarContainer: {
-      backgroundColor: "#205578",
-      borderTopLeftRadius: width * 0.035,
-      borderTopRightRadius: width * 0.035,
-      flexDirection: "row",
-      alignItems: "center",
-      borderTopWidth: 1,
-      borderTopColor: "gray",
-      elevation: 10,
-      height: height * 0.09,
-      paddingBottom: height * 0.005,
-    },
-    tabItem: {
-        display:"flex",
-        flexDirection:"column",
-      alignItems: "center",
-      marginTop:height*0.03,
-      height:height*0.055,
-      width:width*0.2,
-    },
-    tabLabel: {
-      fontWeight:"bold",
-      fontSize: 10,
-      paddingTop:18,
-    },
-    tabThings: {
-      alignItems: "center",
-      backgroundColor: "white",
-      paddingTop: width * 0.005,
-      paddingBottom: width * 0.001,
-      paddingLeft: width * 0.05,
-      paddingRight: width * 0.05,
-      borderRadius: width * 0.04,
-      marginTop:height*0.03,
-      
-    },
-  });
+  tabBarContainer: {
+    backgroundColor: "#205578",
+    borderTopLeftRadius: width * 0.035,
+    borderTopRightRadius: width * 0.035,
+    flexDirection: "row",
+    alignItems: "center",
+    borderTopWidth: 1,
+    borderTopColor: "gray",
+    elevation: 10,
+    height: height * 0.09,
+    paddingBottom: height * 0.005,
+  },
+  tabItem: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: height * 0.03,
+    height: height * 0.055,
+    width: width * 0.2,
+  },
+  tabLabel: {
+    fontWeight: "bold",
+    fontSize: 10,
+    paddingTop: 18,
+  },
+  tabThings: {
+    alignItems: "center",
+    backgroundColor: "white",
+    paddingTop: width * 0.005,
+    paddingBottom: width * 0.001,
+    paddingLeft: width * 0.05,
+    paddingRight: width * 0.05,
+    borderRadius: width * 0.04,
+    marginTop: height * 0.03,
+  },
+});
 
 export default BottomTabNavigator;
