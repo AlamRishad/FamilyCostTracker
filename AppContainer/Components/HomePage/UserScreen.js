@@ -12,7 +12,16 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  getAPIData = async () => {
+    console.warn("Hello");
+    const url = "https://192.168.2.216:7285/GetAllUser";
+    var result = await fetch(url);
+    result = await result.json();
+    console.warn(result);
+  };
+
   useEffect(() => {
+    // getAPIData();
     // const fetchAllUsers = async () => {
     //   setIsLoading(true);
     //   try {

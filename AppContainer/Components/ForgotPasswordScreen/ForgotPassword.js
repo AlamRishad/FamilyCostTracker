@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 // Uncomment and replace with the correct path if you are using an image
 import LogoImage from "../../../assets/splash.png";
 
-const Loginpage = () => {
+const ForgotPassword = () => {
   const [keyboardStatus, setKeyboardStatus] = useState(false);
   const scrollViewRef = useRef(null);
 
@@ -23,40 +23,15 @@ const Loginpage = () => {
   const [passwordY, setPasswordY] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userName, setUserName] = useState("");
 
+  const [password2, setPassword2] = useState("");
   const navigation = useNavigation();
-  const handleForgotPress = async () => {
-    navigation.navigate("ForgotPasswordScreen");
-  };
-  const handleRegister = async () => {
-    navigation.navigate("RegisterScreen");
-  };
+  //   const handleForgotPress = async () => {
+  //     navigation.navigate("ForgotPasswordScreen");
+  //   };
   const handleLoginPress = async () => {
-    navigation.navigate("MainApp");
-    // try {
-    //   console.log(email, password);
-    //   const response = await fetch("https://Localhost:7285/Login", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       email: email,
-    //       passwordHash: password,
-    //     }),
-    //   });
-
-    //   console.log(email);
-    //   if (response.ok) {
-    //     const responseBody = await response.text();
-    //     console.log("Response Body:", responseBody);
-    //     navigation.navigate("MainApp");
-    //   } else {
-    //     console.error("Login failed:", response.status);
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
+    navigation.navigate("LoginScreen");
   };
 
   const passwordInputRef = useRef(null);
@@ -111,20 +86,26 @@ const Loginpage = () => {
         ref={scrollViewRef}
       >
         <View style={styles.icons}>
-          {/* Uncomment if you are using the Image component */}
           <Image
             source={LogoImage}
             style={styles.imageStyle}
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.title}>Login</Text>
+        <Text style={styles.title}>Change Password</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your UserName"
+          onChangeText={setUserName}
+          value={userName}
+        />
         <TextInput
           style={styles.input}
           placeholder="Enter your email"
           onChangeText={setEmail}
           value={email}
         />
+
         <TextInput
           onLayout={(event) => {
             const layout = event.nativeEvent.layout;
@@ -132,7 +113,7 @@ const Loginpage = () => {
             setPasswordY(layout.y);
           }}
           style={styles.input}
-          placeholder="Enter your password "
+          placeholder="Enter your new password "
           onChangeText={setPassword}
           value={password}
           secureTextEntry={true}
@@ -145,19 +126,29 @@ const Loginpage = () => {
           }}
           // secureTextEntry={true}
         />
+        <TextInput
+          onLayout={(event) => {
+            const layout = event.nativeEvent.layout;
+            setPasswordX(layout.x);
+            setPasswordY(layout.y);
+          }}
+          style={styles.input}
+          placeholder="Enter your confirm password "
+          onChangeText={setPassword2}
+          value={password2}
+          secureTextEntry={true}
+          onFocus={() => {
+            scrollViewRef.current.scrollTo({
+              x: passwordX,
+              y: passwordY,
+              animated: true,
+            });
+          }}
+          // secureTextEntry={true}
+        />
         <TouchableOpacity onPress={handleLoginPress}>
           <View style={styles.loginBtn}>
-            <Text style={styles.buttonText}>Login</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleForgotPress}>
-          <View style={styles.forgotButton}>
-            <Text style={styles.buttonText2}>Forgot Password?</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleRegister}>
-          <View style={styles.forgotPassBtn}>
-            <Text style={styles.forgotButtonText}>Register</Text>
+            <Text style={styles.buttonText}>Confirm</Text>
           </View>
         </TouchableOpacity>
       </ScrollView>
@@ -171,15 +162,15 @@ const styles = StyleSheet.create({
   container: {
     // minHeight: windowHeight,
     alignItems: "center",
-    paddingTop: windowHeight * 0.1,
+    paddingTop: windowHeight * 0.09,
     backgroundColor: "white",
   },
   icons: {
-    marginBottom: windowHeight * 0.038,
+    // marginBottom: windowHeight * 0.038,
   },
   imageStyle: {
-    width: windowWidth * 0.9,
-    height: windowHeight * 0.25,
+    width: windowWidth * 0.5,
+    height: windowHeight * 0.1,
     marginLeft: windowWidth * 0.01,
   },
   logo: {},
@@ -245,4 +236,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Loginpage;
+export default ForgotPassword;

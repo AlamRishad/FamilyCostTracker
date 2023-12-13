@@ -18,9 +18,15 @@ const imageSize = width * 0.1;
 
 function AddMemeber(props) {
   const navigation = useNavigation();
+  const handleAddMemberPress = async () => {
+    navigation.navigate("AddMemberScreen");
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.buttonContainer}>
+      <TouchableOpacity
+        style={styles.buttonContainer}
+        onPress={handleAddMemberPress}
+      >
         <View style={styles.buttonInnerContainer}>
           <Icon name="plus" size={20} color="#fff" style={styles.iconStyle} />
           <Text style={styles.textStyle}>Add Member</Text>
