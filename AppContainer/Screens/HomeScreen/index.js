@@ -9,13 +9,16 @@ import { globalStyle } from "../../utils/globalStyle.js";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function Index() {
+export default function Index({ route }) {
+  // const userId = route.params.userId;
+  const userId = route.params.userId;
+  console.log(userId + "homescreen" + route);
   return (
     <SafeAreaView style={[globalStyle.container, styles.container]}>
       <View>
-        <TopBar></TopBar>
-        <AllAddMember></AllAddMember>
-        <Users></Users>
+        <TopBar route={route}></TopBar>
+        <AllAddMember route={route}></AllAddMember>
+        <Users route={route}></Users>
       </View>
     </SafeAreaView>
   );

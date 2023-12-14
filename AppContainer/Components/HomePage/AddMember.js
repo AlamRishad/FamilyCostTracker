@@ -16,11 +16,17 @@ import ProfileIcon from "../../../assets/TopBar/profileIcon2.png";
 const { width, height } = Dimensions.get("window");
 const imageSize = width * 0.1;
 
-function AddMemeber(props) {
+function AddMemeber({ route }) {
+  console.log(route + "add member");
   const navigation = useNavigation();
+
   const handleAddMemberPress = async () => {
-    navigation.navigate("AddMemberScreen");
+    const userId = route.params?.userId;
+    console.log(userId + " addmember section");
+
+    navigation.navigate("AddMemberScreen", { userId: userId });
   };
+
   return (
     <View style={styles.container}>
       <TouchableOpacity

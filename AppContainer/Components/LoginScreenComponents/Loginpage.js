@@ -12,13 +12,12 @@ import {
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
-// Uncomment and replace with the correct path if you are using an image
 import LogoImage from "../../../assets/splash.png";
-
+import { login } from "../../API/login";
 const Loginpage = () => {
   const [keyboardStatus, setKeyboardStatus] = useState(false);
   const scrollViewRef = useRef(null);
-
+  const [errorMessage, setErrorMessage] = useState("");
   const [passwordX, setPasswordX] = useState(0);
   const [passwordY, setPasswordY] = useState(0);
   const [email, setEmail] = useState("");
@@ -31,32 +30,17 @@ const Loginpage = () => {
   const handleRegister = async () => {
     navigation.navigate("RegisterScreen");
   };
-  const handleLoginPress = async () => {
-    navigation.navigate("MainApp");
-    // try {
-    //   console.log(email, password);
-    //   const response = await fetch("https://Localhost:7285/Login", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({
-    //       email: email,
-    //       passwordHash: password,
-    //     }),
-    //   });
 
-    //   console.log(email);
-    //   if (response.ok) {
-    //     const responseBody = await response.text();
-    //     console.log("Response Body:", responseBody);
-    //     navigation.navigate("MainApp");
-    //   } else {
-    //     console.error("Login failed:", response.status);
-    //   }
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
+  const handleLoginPress = async () => {
+    const result = await login(email, password);
+    if (result.success) {
+      console.log("Response Body:", result.body);
+      const userId = result.body.userId;
+      console.log(userId + "login page");
+      navigation.navigate("MainApp", { userId: userId });
+    } else {
+      setErrorMessage(result.message);
+    }
   };
 
   const passwordInputRef = useRef(null);
@@ -145,11 +129,15 @@ const Loginpage = () => {
           }}
           // secureTextEntry={true}
         />
+        {errorMessage ? (
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        ) : null}
         <TouchableOpacity onPress={handleLoginPress}>
           <View style={styles.loginBtn}>
             <Text style={styles.buttonText}>Login</Text>
           </View>
         </TouchableOpacity>
+
         <TouchableOpacity onPress={handleForgotPress}>
           <View style={styles.forgotButton}>
             <Text style={styles.buttonText2}>Forgot Password?</Text>
@@ -189,6 +177,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: windowHeight * 0.025,
     //fontFamily: "HindSiliguri-Regular",
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 14,
+    marginTop: -15,
+    marginBottom: 10,
   },
 
   input: {

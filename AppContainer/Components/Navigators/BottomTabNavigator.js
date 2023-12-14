@@ -16,7 +16,9 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const Tab = createBottomTabNavigator();
 
-const BottomTabNavigator = () => {
+const BottomTabNavigator = ({ route, navigation }) => {
+  const { userId } = route.params;
+  console.log(userId + "bottomnavbar");
   return (
     <Tab.Navigator
       initialRouteName="newProblem"
@@ -31,6 +33,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen
         name="home"
         component={HomeScreen}
+        initialParams={{ userId: route }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
@@ -52,6 +55,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen
         name="newProblem"
         component={HomeScreen}
+        initialParams={{ userId: userId }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
@@ -73,6 +77,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen
         name="newProblem2"
         component={HomeScreen}
+        initialParams={{ userId: userId }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
@@ -94,6 +99,7 @@ const BottomTabNavigator = () => {
       <Tab.Screen
         name="newProblem3"
         component={HomeScreen}
+        initialParams={{ userId: userId }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text

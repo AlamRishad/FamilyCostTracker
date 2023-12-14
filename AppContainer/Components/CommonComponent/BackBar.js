@@ -8,46 +8,22 @@ import {
   Text,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/Ionicons";
 
 import LogoImage from "../../../assets/splash.png";
-import ProfileIcon from "../../../assets/TopBar/profileIcon2.png";
 const { width, height } = Dimensions.get("window");
 const imageSize = width * 0.1;
 
-function Topbar({ route }) {
-  console.log(route, "top");
+function BackBar(props) {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        style={styles.button2}
+        style={styles.button}
         activeOpacity={0.5}
-        onPress={() => {
-          navigation.navigate("MainApp");
-        }}
+        onPress={() => navigation.goBack()}
       >
-        <Image
-          source={LogoImage}
-          style={styles.imageStyle}
-          resizeMode="contain"
-        />
-        <View>
-          <Text style={styles.labelText}>Family </Text>
-          <Text style={styles.labelText2}>Cost Tracker</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button2}
-        activeOpacity={0.5}
-        onPress={() => {
-          navigation.navigate("Profile");
-        }}
-      >
-        <Image
-          source={ProfileIcon}
-          style={styles.imageStyle2}
-          resizeMode="contain"
-        />
+        <Icon name="arrow-back" size={24} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -61,9 +37,6 @@ const styles = StyleSheet.create({
     height: height * 0.1,
     width: "100%",
     backgroundColor: "#205578",
-    borderBottomRightRadius: 16,
-
-    borderBottomLeftRadius: 16,
     // borderBottomWidth: 2,
     // borderBottomColor: "#D8D8D8",
     // borderBottomEndRadius: 10,
@@ -78,7 +51,6 @@ const styles = StyleSheet.create({
     width: width * 0.15,
     height: height * 0.075,
     marginLeft: width * 0.01,
-    borderRadius: 21,
   },
   imageStyle2: {
     width: width * 0.1,
@@ -91,6 +63,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginHorizontal: width * 0.02,
+    marginLeft: width * 0.04,
   },
   buttonDesign: {
     resizeMode: "contain",
@@ -115,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Topbar;
+export default BackBar;
