@@ -13,6 +13,15 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import ProfileImage from "../../../assets/splash.png";
 const Profile = () => {
   const navigation = useNavigation();
+  const handlePrivacyPress = async () => {
+    navigation.navigate("PrivacyScreen");
+  };
+  const handleHelpPress = async () => {
+    navigation.navigate("HelpScreen");
+  };
+  const handleSecurityPress = async () => {
+    navigation.navigate("SecurityScreen");
+  };
   return (
     <ScrollView>
       <View style={styles.container}>
@@ -76,9 +85,7 @@ const Profile = () => {
         <View style={styles.generalSection}>
           <Text style={styles.generalText2}>General</Text>
           <TouchableOpacity
-            onPress={() => {
-              /* handle security */
-            }}
+            onPress={handleSecurityPress}
             style={styles.generalView}
           >
             <Text style={styles.generalText}>Security</Text>
@@ -87,9 +94,7 @@ const Profile = () => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              /* handle security */
-            }}
+            onPress={handleHelpPress}
             style={styles.generalView}
           >
             <Text style={styles.generalText}>Help</Text>
@@ -98,9 +103,7 @@ const Profile = () => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              /* handle security */
-            }}
+            onPress={handlePrivacyPress}
             style={styles.generalView}
           >
             <Text style={styles.generalText}>Privacy Policy</Text>
