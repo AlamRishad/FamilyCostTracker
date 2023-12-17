@@ -10,6 +10,7 @@ import AddMemberScreen from "../../Screens/AddMemberScreen";
 import PrivacyScreen from "../../Screens/PrivacyScreen";
 import SecurityScreen from "../../Screens/SecurityScreen";
 import HelpScreen from "../../Screens/HelpScreen";
+import MemberDetailsScreen from "../../Screens/MemberDetailsScreen";
 const Stack = createNativeStackNavigator();
 export default function AppStackNavigator() {
   return (
@@ -37,6 +38,11 @@ export default function AppStackNavigator() {
       <Stack.Screen name="HelpScreen" component={HelpScreen} />
 
       <Stack.Screen name="SecurityScreen" component={SecurityScreen} />
+
+      <Stack.Screen
+        name="MemberDetailsScreen"
+        component={MemberDetailsScreen}
+      />
     </Stack.Navigator>
   );
 }

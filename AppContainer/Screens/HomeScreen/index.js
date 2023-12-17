@@ -17,7 +17,9 @@ export default function Index({ route }) {
     <SafeAreaView style={[globalStyle.container, styles.container]}>
       <View>
         <TopBar route={route}></TopBar>
-        <AllAddMember route={route}></AllAddMember>
+        <View style={styles.addMember}>
+          <AllAddMember route={route}></AllAddMember>
+        </View>
         <Users route={route}></Users>
       </View>
     </SafeAreaView>
@@ -32,5 +34,19 @@ const styles = StyleSheet.create({
   scrollableViewContainer: {},
   componentContainer: {
     marginBottom: 20,
+  },
+  addMember: {
+    marginTop: "2%",
+    paddingTop: "2%",
+    paddingLeft: "3.5%",
+    paddingBottom: "2%",
+    borderRadius: 20,
+    flexWrap: "wrap", // This will allow the buttons to wrap to the next line
+    justifyContent: "flex-start", // Aligns buttons to the start of the container
+
+    alignItems: "center",
+    width: "95%",
+    marginLeft: "2.5%",
+    backgroundColor: "white",
   },
 });

@@ -11,6 +11,7 @@ import ReportIcon from "../../../assets/BottomNavBar/reportIcon";
 import ReportIconDis from "../../../assets/BottomNavBar/reportIcondis";
 import SettingsIcon from "../../../assets/BottomNavBar/settingsIcon";
 import SettingsIconDis from "../../../assets/BottomNavBar/settingsIconDis";
+import HelpScreen from "../../Screens/HelpScreen";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -33,7 +34,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
       <Tab.Screen
         name="home"
         component={HomeScreen}
-        initialParams={{ userId: route }}
+        initialParams={{ userId: userId }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
@@ -54,7 +55,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
       />
       <Tab.Screen
         name="newProblem"
-        component={HomeScreen}
+        component={HelpScreen}
         initialParams={{ userId: userId }}
         options={{
           tabBarLabel: ({ focused }) => (
@@ -76,7 +77,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
       />
       <Tab.Screen
         name="newProblem2"
-        component={HomeScreen}
+        component={HelpScreen}
         initialParams={{ userId: userId }}
         options={{
           tabBarLabel: ({ focused }) => (
@@ -98,7 +99,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
       />
       <Tab.Screen
         name="newProblem3"
-        component={HomeScreen}
+        component={HelpScreen}
         initialParams={{ userId: userId }}
         options={{
           tabBarLabel: ({ focused }) => (

@@ -1,158 +1,179 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TouchableOpacity,
   Dimensions,
+  FlatList,
+  ScrollView,
 } from "react-native";
-import LinearGradient from "react-native-linear-gradient";
 import Icon from "react-native-vector-icons/AntDesign";
 import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { getFamilyMembersByUserId } from "../../API/getAllUser";
 
-import LogoImage from "../../../assets/splash.png";
-import ProfileIcon from "../../../assets/TopBar/profileIcon2.png";
 const { width, height } = Dimensions.get("window");
-const imageSize = width * 0.1;
 
-function AddMemeber({ route }) {
-  console.log(route + "add member");
+function AddMember({ route }) {
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [familyMembers, setFamilyMembers] = useState([]);
+  const { userId } = route.params;
 
-  const handleAddMemberPress = async () => {
-    const userId = route.params?.userId;
+  const fetchFamilyMembers = () => {
+    setIsLoading(true);
+    getFamilyMembersByUserId(userId)
+      .then((data) => {
+        setFamilyMembers(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err.toString());
+        setIsLoading(false);
+      });
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchFamilyMembers();
+      // Optional cleanup if needed
+      return () => {};
+    }, [userId])
+  );
+
+  const handleAddMemberPress = () => {
     console.log(userId + " addmember section");
-
     navigation.navigate("AddMemberScreen", { userId: userId });
   };
 
+  useEffect(() => {
+    setIsLoading(true);
+    getFamilyMembersByUserId(userId)
+      .then((data) => {
+        setFamilyMembers(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err.toString());
+        setIsLoading(false);
+      });
+  }, [userId]);
+
+  const truncate = (str, num) => {
+    if (str.length <= num) {
+      return str;
+    }
+    return str.slice(0, num) + "...";
+  };
+
+  const renderMemberItem = ({ item }) => (
+    <TouchableOpacity
+      style={styles.memberItem}
+      onPress={() =>
+        navigation.navigate("MemberDetailsScreen", {
+          familyMemberID: item.familyMemberID,
+          userId: userId,
+        })
+      }
+    >
+      <Icon2 name="human-male" size={20} color="#fff" />
+
+      <Text style={styles.memberRelationText}>{item.relationship}</Text>
+      <Text style={styles.memberText}>{truncate(item.name, 20)}</Text>
+    </TouchableOpacity>
+  );
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.buttonContainer}
-        onPress={handleAddMemberPress}
-      >
-        <View style={styles.buttonInnerContainer}>
-          <Icon name="plus" size={20} color="#fff" style={styles.iconStyle} />
-          <Text style={styles.textStyle}>Add Member</Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.buttonContainer, styles.buttonContainer2]}
-      >
-        <View style={styles.buttonInnerContainer}>
-          <Icon2
-            name="human-male"
-            size={20}
-            color="#fff"
-            style={styles.iconStyle}
-          />
-          <Text style={styles.textStyle} numberOfLines={2} ellipsizeMode="tail">
-            Child
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.buttonContainer, styles.buttonContainer2]}
-      >
-        <View style={styles.buttonInnerContainer}>
-          <Icon2
-            name="human-male"
-            size={20}
-            color="#fff"
-            style={styles.iconStyle}
-          />
-          <Text style={styles.textStyle} numberOfLines={2} ellipsizeMode="tail">
-            Others
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.buttonContainer, styles.buttonContainer2]}
-      >
-        <View style={styles.buttonInnerContainer}>
-          <Icon2
-            name="human-male"
-            size={20}
-            color="#fff"
-            style={styles.iconStyle}
-          />
-          <Text style={styles.textStyle} numberOfLines={2} ellipsizeMode="tail">
-            Mother
-          </Text>
-        </View>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.buttonContainer, styles.buttonContainer2]}
-      >
-        <View style={styles.buttonInnerContainer}>
-          <Icon2
-            name="human-male"
-            size={20}
-            color="#fff"
-            style={styles.iconStyle}
-          />
-          <Text style={styles.textStyle} numberOfLines={2} ellipsizeMode="tail">
-            Father
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+    <ScrollView style={styles.scrollView}>
+      <View style={styles.container}>
+        <FlatList
+          data={[{ key: "addMemberButton" }, ...familyMembers]}
+          renderItem={({ item }) => {
+            if (item.key === "addMemberButton") {
+              return (
+                <TouchableOpacity
+                  style={[styles.buttonContainer, styles.addMemberButton]}
+                  onPress={handleAddMemberPress}
+                >
+                  <Icon name="plus" size={20} color="#fff" />
+                  <Text style={styles.textStyle}>Add Member</Text>
+                </TouchableOpacity>
+              );
+            } else {
+              return renderMemberItem({ item });
+            }
+          }}
+          keyExtractor={(item, index) => item.key || index.toString()}
+          numColumns={Math.floor(width / (width * 0.2 + 6))}
+          columnWrapperStyle={styles.row}
+        />
+
+        {isLoading && <Text>Loading family members...</Text>}
+        {error && <Text style={styles.error}>{error}</Text>}
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginTop: "2%",
-    paddingTop: "2%",
-    paddingLeft: "3.5%",
-    paddingBottom: "2%",
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: "black",
-    flexDirection: "row",
-    flexWrap: "wrap", // This will allow the buttons to wrap to the next line
-    justifyContent: "flex-start", // Aligns buttons to the start of the container
-
+  scrollView: {
+    maxHeight: height * 0.3,
+  },
+  container: {},
+  row: {
+    flex: 1,
+    justifyContent: "flex-start",
+    flexWrap: "wrap",
+  },
+  memberItem: {
+    backgroundColor: "#205578",
+    borderRadius: 10,
+    padding: 10,
+    margin: 3,
+    width: width * 0.2,
+    justifyContent: "center",
     alignItems: "center",
-    width: "95%",
-    marginLeft: "2.5%",
-    backgroundColor: "white",
+
+    maxHeight: height * 0.1,
+  },
+  memberText: {
+    color: "#76C7A6",
+    fontSize: 10,
+    textAlign: "center",
+    fontWeight: "bold",
+    height: height * 0.03,
+  },
+  memberRelationText: {
+    color: "white",
+    fontSize: 10,
+    textAlign: "center",
+    fontWeight: "bold",
   },
   buttonContainer: {
-    borderRadius: 15,
-    backgroundColor: "#76C7A6",
-    overflow: "hidden",
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.5,
-    shadowRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 5,
-    width: width * 0.2,
-    height: height * 0.09,
+    padding: 10,
     margin: 3,
-  },
-  buttonContainer2: {
-    backgroundColor: "#205578",
-  },
-  buttonInnerContainer: {
     justifyContent: "center",
     alignItems: "center",
   },
-  iconStyle: {
-    marginBottom: 2, // Adjust based on your design needs
+  addMemberButton: {
+    backgroundColor: "#76C7A6",
+    borderRadius: 15,
+    width: width * 0.2,
+    minHeight: height * 0.1,
   },
   textStyle: {
     color: "white",
     fontSize: 10,
     textAlign: "center",
     fontWeight: "bold",
+    marginTop: 4,
+  },
+  error: {
+    color: "red",
+    textAlign: "center",
   },
 });
 
-export default AddMemeber;
+export default AddMember;

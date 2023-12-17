@@ -32,16 +32,16 @@ const Loginpage = () => {
   };
 
   const handleLoginPress = async () => {
-    navigation.navigate("MainApp", { userId: email });
-    // const result = await login(email, password);
-    // if (result.success) {
-    //   console.log("Response Body:", result.body);
-    //   const userId = result.body.userId;
-    //   console.log(userId + "login page");
-    //   navigation.navigate("MainApp", { userId: userId });
-    // } else {
-    //   setErrorMessage(result.message);
-    // }
+    // navigation.navigate("MainApp", { userId: email });
+    const result = await login(email, password);
+    if (result.success) {
+      console.log("Response Body:", result.body);
+      const userId = result.body.userId;
+      console.log(userId + "login page");
+      navigation.navigate("MainApp", { userId: userId });
+    } else {
+      setErrorMessage(result.message);
+    }
   };
 
   const passwordInputRef = useRef(null);

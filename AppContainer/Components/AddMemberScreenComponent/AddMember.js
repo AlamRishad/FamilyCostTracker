@@ -9,8 +9,12 @@ import {
   TextInput,
   Dimensions,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { createFamilyMember } from "../../API/CreateMember";
 
-const Dropdown = ({ options, onSelect }) => {
+const Dropdown = ({ options, onSelect, route }) => {
+  const userId = route;
+  console.log(route + "dropdown" + userId);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const animatedHeight = useRef(new Animated.Value(0)).current;
@@ -31,10 +35,19 @@ const Dropdown = ({ options, onSelect }) => {
     toggleDropdown();
   };
 
+  const navigation = useNavigation();
+
   const addFamilyMember = () => {
     console.log("Submitting form...");
-    console.log("Full Name:", fullName);
-    console.log("Relationship:", selectedOption);
+
+    createFamilyMember(fullName, selectedOption, userId)
+      .then((responseText) => {
+        console.log("Family member created:", responseText);
+        navigation.goBack();
+      })
+      .catch((error) => {
+        console.error("Failed to create family member:", error);
+      });
   };
 
   return (
@@ -76,9 +89,9 @@ const Dropdown = ({ options, onSelect }) => {
   );
 };
 
-const FamilyMemberForm = () => {
+const FamilyMemberForm = ({ route }) => {
   const [relationship, setRelationship] = useState("");
-
+  console.log(route);
   return (
     <View style={styles.formContainer}>
       <Dropdown
@@ -115,6 +128,7 @@ const FamilyMemberForm = () => {
           "Other",
         ]}
         onSelect={(option) => setRelationship(option)}
+        route={route}
       />
     </View>
   );
@@ -164,7 +178,6 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 10,
   },
-
   headerText: {
     fontSize: 16,
   },
@@ -174,8 +187,6 @@ const styles = StyleSheet.create({
     // left: 0,
     // right: 0,
     backgroundColor: "white",
-    // borderWidth: 1,
-    // borderColor: "#ddd",
     zIndex: 1000,
   },
   option: {
