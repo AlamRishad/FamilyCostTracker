@@ -13,6 +13,7 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function Index({ route, navigation }) {
   const { familyMemberID, userId } = route.params;
+  console.log(familyMemberID);
   return (
     <SafeAreaView style={[globalStyle.container, styles.container]}>
       <View>

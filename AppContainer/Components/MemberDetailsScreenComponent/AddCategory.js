@@ -26,8 +26,8 @@ const AddCategory = ({ route }) => {
     FamilyMemberID: route.params.familyMemberID
       ? route.params.familyMemberID.toString()
       : "",
-    whichDate: "",
-    Periodicity: "",
+    // whichDate: "",
+    // Periodicity: "",
   };
   const [category, setCategory] = useState(initialCategoryState);
 
@@ -39,19 +39,33 @@ const AddCategory = ({ route }) => {
 
   const onSubmit = async () => {
     setIsSubmitting(true);
+    if (!category.Name) {
+      // Handle the error appropriately
+      console.error("The name field cannot be empty.");
+      setError("The name field cannot be empty.");
+      return; // Stop the execution if the name is null
+    }
     try {
       const result = await addCategory({
         name: category.Name,
         userID: category.UserID,
         familyMemberID: category.FamilyMemberID,
-        whichDate: category.whichDate,
-        periodicity: category.Periodicity,
+        // whichDate: category.whichDate,
+        // periodicity: category.Periodicity,
       });
 
       if (result) {
         console.log("Category submitted", result);
+        navigation.navigate("MemberDetailsScreen", {
+          familyMemberID: category.FamilyMemberID,
+          userId: category.UserID,
+        });
       } else {
         console.log("Category added, but no details returned from the server.");
+        navigation.navigate("MemberDetailsScreen", {
+          familyMemberID: category.FamilyMemberID,
+          userId: category.UserID,
+        });
       }
 
       setCategory(initialCategoryState);
@@ -185,7 +199,7 @@ const AddCategory = ({ route }) => {
         />
 
         {/* Dropdown for Periodicity */}
-        <View style={styles.pickerContainer}>
+        {/* <View style={styles.pickerContainer}>
           <Picker
             selectedValue={category.Periodicity}
             onValueChange={(itemValue, itemIndex) =>
@@ -208,7 +222,7 @@ const AddCategory = ({ route }) => {
           <Text style={styles.datePickerText}>
             Date: {category.whichDate || "none"}
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
           style={[styles.addCategory, styles.addCategoryText]}
@@ -243,7 +257,6 @@ const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
     height: height * 0.075,
-    // padding: windowWidth * 0.01,
     paddingLeft: 15,
     width: width * 0.85,
     backgroundColor: "#EFF3FB",

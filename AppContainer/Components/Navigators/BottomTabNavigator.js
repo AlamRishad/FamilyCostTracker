@@ -12,7 +12,9 @@ import ReportIconDis from "../../../assets/BottomNavBar/reportIcondis";
 import SettingsIcon from "../../../assets/BottomNavBar/settingsIcon";
 import SettingsIconDis from "../../../assets/BottomNavBar/settingsIconDis";
 import HelpScreen from "../../Screens/HelpScreen";
+import ExpensesScreen from "../../Screens/ExpensesScreen";
 
+import BudgetScreen from "../../Screens/BudgetScreen";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const Tab = createBottomTabNavigator();
@@ -55,7 +57,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
       />
       <Tab.Screen
         name="newProblem"
-        component={HelpScreen}
+        component={ExpensesScreen}
         initialParams={{ userId: userId }}
         options={{
           tabBarLabel: ({ focused }) => (
@@ -99,7 +101,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
       />
       <Tab.Screen
         name="newProblem3"
-        component={HelpScreen}
+        component={BudgetScreen}
         initialParams={{ userId: userId }}
         options={{
           tabBarLabel: ({ focused }) => (
@@ -109,7 +111,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
                 { color: focused ? "#205578" : "#ffffff" },
               ]}
             >
-              Settings
+              Budget
             </Text>
           ),
           tabBarIcon: ({ focused }) => (

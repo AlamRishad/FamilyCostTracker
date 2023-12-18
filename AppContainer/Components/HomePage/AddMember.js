@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
-  ScrollView,
 } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
 import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
@@ -38,7 +37,6 @@ function AddMember({ route }) {
   useFocusEffect(
     useCallback(() => {
       fetchFamilyMembers();
-      // Optional cleanup if needed
       return () => {};
     }, [userId])
   );
@@ -86,47 +84,45 @@ function AddMember({ route }) {
   );
 
   return (
-    <ScrollView style={styles.scrollView}>
-      <View style={styles.container}>
-        <FlatList
-          data={[{ key: "addMemberButton" }, ...familyMembers]}
-          renderItem={({ item }) => {
-            if (item.key === "addMemberButton") {
-              return (
-                <TouchableOpacity
-                  style={[styles.buttonContainer, styles.addMemberButton]}
-                  onPress={handleAddMemberPress}
-                >
-                  <Icon name="plus" size={20} color="#fff" />
-                  <Text style={styles.textStyle}>Add Member</Text>
-                </TouchableOpacity>
-              );
-            } else {
-              return renderMemberItem({ item });
-            }
-          }}
-          keyExtractor={(item, index) => item.key || index.toString()}
-          numColumns={Math.floor(width / (width * 0.2 + 6))}
-          columnWrapperStyle={styles.row}
-        />
+    <View style={styles.container}>
+      <FlatList
+        data={[{ key: "addMemberButton" }, ...familyMembers]}
+        renderItem={({ item }) => {
+          if (item.key === "addMemberButton") {
+            return (
+              <TouchableOpacity
+                style={[styles.buttonContainer, styles.addMemberButton]}
+                onPress={handleAddMemberPress}
+              >
+                <Icon name="plus" size={20} color="#fff" />
+                <Text style={styles.textStyle}>Add Member</Text>
+              </TouchableOpacity>
+            );
+          } else {
+            return renderMemberItem({ item });
+          }
+        }}
+        keyExtractor={(item, index) => item.key || index.toString()}
+        numColumns={Math.floor(width / (width * 0.2 + 6))}
+        columnWrapperStyle={styles.row}
+      />
 
-        {isLoading && <Text>Loading family members...</Text>}
-        {error && <Text style={styles.error}>{error}</Text>}
-      </View>
-    </ScrollView>
+      {isLoading && <Text>Loading family members...</Text>}
+      {error && <Text style={styles.error}>{error}</Text>}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
+  container: {
     maxHeight: height * 0.3,
   },
-  container: {},
   row: {
     flex: 1,
     justifyContent: "flex-start",
     flexWrap: "wrap",
   },
+
   memberItem: {
     backgroundColor: "#205578",
     borderRadius: 10,

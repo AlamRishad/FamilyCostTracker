@@ -11,6 +11,9 @@ import PrivacyScreen from "../../Screens/PrivacyScreen";
 import SecurityScreen from "../../Screens/SecurityScreen";
 import HelpScreen from "../../Screens/HelpScreen";
 import MemberDetailsScreen from "../../Screens/MemberDetailsScreen";
+import ExpensesScreen from "../../Screens/ExpensesScreen";
+import BudgetScreen from "../../Screens/BudgetScreen";
+
 const Stack = createNativeStackNavigator();
 export default function AppStackNavigator() {
   return (
@@ -43,6 +46,9 @@ export default function AppStackNavigator() {
         name="MemberDetailsScreen"
         component={MemberDetailsScreen}
       />
+      <Stack.Screen name="ExpensesScreen" component={ExpensesScreen} />
+
+      <Stack.Screen name="BudgetScreen" component={BudgetScreen} />
     </Stack.Navigator>
   );
 }

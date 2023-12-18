@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, View, Text } from "react-native";
 import TopBar from "../../Components/CommonComponent/TopBar";
 import AllAddMember from "../../Components/HomePage/AddMember";
-import PeriodicityDetails from "../../Components/HomePage/PeriodicityChart.js";
+import ShowAllBudget from "../../Components/BudgetScreenComponent/ShowAllBudget.js";
 
 import { globalStyle } from "../../utils/globalStyle.js";
 
@@ -12,15 +12,14 @@ const windowHeight = Dimensions.get("window").height;
 export default function Index({ route }) {
   // const userId = route.params.userId;
   const userId = route.params.userId;
+  console.log(userId);
   console.log(userId + "homescreen" + route);
   return (
     <SafeAreaView style={[globalStyle.container, styles.container]}>
       <View>
         <TopBar route={route}></TopBar>
-        <View style={styles.addMember}>
-          <AllAddMember route={route}></AllAddMember>
-        </View>
-        <PeriodicityDetails route={route}></PeriodicityDetails>
+
+        <ShowAllBudget route={route}></ShowAllBudget>
       </View>
     </SafeAreaView>
   );
