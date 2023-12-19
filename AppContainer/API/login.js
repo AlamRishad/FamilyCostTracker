@@ -32,3 +32,24 @@ export const login = async (email, password) => {
     };
   }
 };
+export const registerUser = async (userData) => {
+  try {
+    console.log(userData);
+    const response = await fetch(`${BASE_URL}/CreateUser`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Registration error:", error);
+    throw error;
+  }
+};

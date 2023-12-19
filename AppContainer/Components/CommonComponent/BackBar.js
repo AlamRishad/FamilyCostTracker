@@ -14,7 +14,7 @@ import LogoImage from "../../../assets/splash.png";
 const { width, height } = Dimensions.get("window");
 const imageSize = width * 0.1;
 
-function BackBar(props) {
+function BackBar({ userId }) {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -24,7 +24,6 @@ function BackBar(props) {
         onPress={() => navigation.goBack()}
       >
         <Icon name="arrow-back" size={24} color="white" />
-        <Text style={styles.text}>Family Cost Tracker</Text>
       </TouchableOpacity>
     </View>
   );
@@ -48,12 +47,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: 7,
   },
-  text: {
-    paddingLeft: width * 0.23,
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
   imageStyle: {
     width: width * 0.15,
     height: height * 0.075,
@@ -66,7 +59,6 @@ const styles = StyleSheet.create({
     borderRadius: 21,
   },
   button: {
-    flexDirection: "row",
     height: height * 0.06,
     justifyContent: "center",
     alignItems: "center",

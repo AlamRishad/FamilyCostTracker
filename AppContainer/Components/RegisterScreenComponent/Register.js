@@ -12,8 +12,8 @@ import {
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
-// Uncomment and replace with the correct path if you are using an image
 import LogoImage from "../../../assets/splash.png";
+import { registerUser } from "../../API/login";
 
 const Register = () => {
   const [keyboardStatus, setKeyboardStatus] = useState(false);
@@ -32,6 +32,28 @@ const Register = () => {
   //   };
   const handleLoginPress = async () => {
     navigation.navigate("LoginScreen");
+  };
+  const handleRegistrationPress = async () => {
+    if (password !== password2) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    const newUser = {
+      username: userName,
+      passwordHash: password, // This should be hashed in a real-world scenario
+      email: email,
+    };
+
+    try {
+      const registeredUser = await registerUser(newUser);
+      console.log("User registered:", registeredUser);
+      navigation.navigate("LoginScreen");
+      // Navigate to another screen or show success message
+    } catch (error) {
+      // Handle registration error (e.g., show an alert or set error state)
+      console.error("Registration failed:", error);
+    }
   };
 
   const passwordInputRef = useRef(null);
@@ -146,7 +168,7 @@ const Register = () => {
           }}
           // secureTextEntry={true}
         />
-        <TouchableOpacity onPress={handleLoginPress}>
+        <TouchableOpacity onPress={handleRegistrationPress}>
           <View style={styles.loginBtn}>
             <Text style={styles.buttonText}>Confirm</Text>
           </View>

@@ -7,7 +7,7 @@ export const fetchAllBudgetDetails = async (userId) => {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
-    //console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     console.error("Fetching error:", error);

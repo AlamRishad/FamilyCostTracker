@@ -14,16 +14,14 @@ export const createFamilyMember = async (name, relationship, userId) => {
       }),
     });
 
-    // If the response is not ok, it will throw before reaching the next line
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    // Use response.text() if the server sends non-JSON responses
     let responseText = await response.text();
     return responseText;
   } catch (error) {
     console.error(error);
-    throw error; // Rethrow the error so you can catch it in the calling function
+    throw error;
   }
 };
