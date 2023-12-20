@@ -143,7 +143,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   datePickerContainer: {
     backgroundColor: "white",
@@ -152,23 +152,11 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   pickerGroup: {
-    width: width * 0.5,
-    // flexDirection: "row",
-    // justifyContent: "center",
-  },
-  pickerYear: {
-    // flexDirection: "row",
-    // justifyContent: "center",
+    flexDirection: "row",
+    justifyContent: "center",
   },
   datePicker: {
-    // width: width * 0.5,
-  },
-  saveButton2: {
-    width: width * 0.5,
-    backgroundColor: "#205578",
-    borderRadius: 5,
-    padding: 10,
-    elevation: 2,
+    width: 120,
   },
   datePickerText: {
     marginVertical: 8,

@@ -21,7 +21,7 @@ export default function Index({ route, navigation }) {
         <MemberDetails route={route}></MemberDetails>
 
         <MemberAddCategory route={route}></MemberAddCategory>
-        <ShowAllCategory route={route}></ShowAllCategory>
+        {/* <ShowAllCategory route={route}></ShowAllCategory> */}
       </View>
     </SafeAreaView>
   );

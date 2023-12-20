@@ -25,6 +25,7 @@ export const getFamilyMembersByUserId = async (userId) => {
     console.error("Failed to fetch family members", error);
   }
 };
+
 export const getFamilyMemberDetails = async (familyMemberID) => {
   try {
     let response = await fetch(

@@ -23,7 +23,7 @@ function Topbar({ route }) {
         style={styles.button2}
         activeOpacity={0.5}
         onPress={() => {
-          navigation.navigate("MainApp");
+          // navigation.navigate("MainApp");
         }}
       >
         <Image

@@ -13,21 +13,24 @@ export const updateBudgetDetails = async (budgetId, budgetData) => {
       `${API_BASE_URL}/api/Budget/${budgetId}`,
       requestOptions
     );
-    // const responseBody = await response.j();
-    // console.log("Updating budget with data:", JSON.stringify(responseBody));
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-
-    return await response.json();
+    if (response.ok) {
+      const responseBody = await response.json();
+    } else {
+      throw new Error("Server responded with an error.");
+    }
   } catch (error) {
+    if (error.message === "JSON Parse error: Unexpected end of input") {
+      return;
+    }
     console.error("Budget error:", error);
     throw error;
   }
 };
 
 export const createBudgetDetail = async (budgetData) => {
-  //   console.log("Request data: ", JSON.stringify(budgetData));
   try {
     const response = await fetch(`${API_BASE_URL}/api/Budget`, {
       method: "POST",
@@ -44,6 +47,9 @@ export const createBudgetDetail = async (budgetData) => {
 
     return responseBody;
   } catch (error) {
+    if (error.message === "JSON Parse error: Unexpected end of input") {
+      return;
+    }
     console.error("Budget error:", error);
     throw error;
   }

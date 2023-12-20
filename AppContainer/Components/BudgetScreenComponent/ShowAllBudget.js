@@ -71,6 +71,7 @@ const ShowAllBudgetDetails = ({ route }) => {
         response = await createBudgetDetail(budgetData);
       }
 
+      console, log(response + "update");
       setBudgetDetails((prevDetails) =>
         selectedCategory.budgetID
           ? prevDetails.map((detail) =>
@@ -78,11 +79,17 @@ const ShowAllBudgetDetails = ({ route }) => {
             )
           : [...prevDetails, response]
       );
+      console, log(response + "update");
       setIsModalVisible(false);
       console.log("Budget detail saved successfully: ", response);
     } catch (error) {
+      console.log("update");
       setIsModalVisible(false);
-      console.error("Failed to save budget detail: ", error);
+      if (error.message === "Property 'log' doesn't exist") {
+        fetchBudgetDetails();
+      } else {
+        console.error("Failed to save budget detail: ", error);
+      }
     }
   };
 
@@ -201,11 +208,11 @@ const ShowAllBudgetDetails = ({ route }) => {
             </View>
 
             <TouchableOpacity
-              style={[styles.addCategory, styles.addCategoryText]}
+              style={styles.saveButton2}
               title="Done"
               onPress={() => setDate(selectedDate)}
             >
-              <Text style={styles.addCategoryText}>Done</Text>
+              <Text style={styles.textStyle}>Done</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -213,7 +220,7 @@ const ShowAllBudgetDetails = ({ route }) => {
     );
   };
   const renderDatePicker2 = () => {
-    const years = Array.from({ length: 2050 - 2023 + 1 }, (_, i) => 2023 + i);
+    const years = Array.from({ length: 2050 - 2021 + 1 }, (_, i) => 2021 + i);
     const months = [...Array(12)].map((_, i) => i + 1);
     const days = [
       ...Array(
@@ -288,11 +295,11 @@ const ShowAllBudgetDetails = ({ route }) => {
             </View>
 
             <TouchableOpacity
-              style={[styles.addCategory, styles.addCategoryText]}
+              style={styles.saveButton2}
               title="Done"
               onPress={() => setEndDate(selectedEndDate)}
             >
-              <Text style={styles.addCategoryText}>Done</Text>
+              <Text style={styles.textStyle}>Done</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -471,7 +478,8 @@ const ShowAllBudgetDetails = ({ route }) => {
                 </Text>
                 <View style={styles.modalContentContainer}>
                   <Text style={styles.modalText}>
-                    Amount: {selectedCategory ? selectedCategory.amount : ""}
+                    Amount:
+                    {/* {selectedCategory ? selectedCategory.amount : ""} */}
                   </Text>
                   <TextInput
                     style={[styles.pickerContainer3, styles.addMemberButton]}
@@ -519,7 +527,7 @@ const ShowAllBudgetDetails = ({ route }) => {
                   </Picker>
                 </View>
                 <TouchableOpacity
-                  style={styles.closeButton}
+                  style={styles.saveButton}
                   onPress={saveCategoryDetails}
                 >
                   <Text style={styles.textStyle}>Update</Text>

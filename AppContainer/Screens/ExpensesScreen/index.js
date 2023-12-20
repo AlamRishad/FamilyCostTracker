@@ -3,7 +3,7 @@ import { Dimensions, SafeAreaView, StyleSheet, View, Text } from "react-native";
 import TopBar from "../../Components/CommonComponent/TopBar";
 import AllAddMember from "../../Components/HomePage/AddMember";
 import PeriodicityDetails from "../../Components/HomePage/PeriodicityChart.js";
-
+import ShowAllExpense from "../../Components/ExpensesScreenComponent/AllExpensesCategory.js";
 import { globalStyle } from "../../utils/globalStyle.js";
 
 const windowWidth = Dimensions.get("window").width;
@@ -19,7 +19,7 @@ export default function Index({ route }) {
       <View>
         <TopBar route={route}></TopBar>
 
-        {/* <ShowAllCategory route={route}></ShowAllCategory> */}
+        <ShowAllExpense route={route}></ShowAllExpense>
       </View>
     </SafeAreaView>
   );
