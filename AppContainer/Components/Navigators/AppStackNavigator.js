@@ -13,7 +13,7 @@ import HelpScreen from "../../Screens/HelpScreen";
 import MemberDetailsScreen from "../../Screens/MemberDetailsScreen";
 import ExpensesScreen from "../../Screens/ExpensesScreen";
 import BudgetScreen from "../../Screens/BudgetScreen";
-
+import ReportScreen from "../../Screens/ReportScreen";
 const Stack = createNativeStackNavigator();
 export default function AppStackNavigator() {
   return (
@@ -49,6 +49,8 @@ export default function AppStackNavigator() {
       <Stack.Screen name="ExpensesScreen" component={ExpensesScreen} />
 
       <Stack.Screen name="BudgetScreen" component={BudgetScreen} />
+
+      <Stack.Screen name="ReportScreen" component={ReportScreen} />
     </Stack.Navigator>
   );
 }

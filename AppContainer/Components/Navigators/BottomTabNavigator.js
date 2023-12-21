@@ -11,7 +11,7 @@ import ReportIcon from "../../../assets/BottomNavBar/reportIcon";
 import ReportIconDis from "../../../assets/BottomNavBar/reportIcondis";
 import SettingsIcon from "../../../assets/BottomNavBar/settingsIcon";
 import SettingsIconDis from "../../../assets/BottomNavBar/settingsIconDis";
-import HelpScreen from "../../Screens/HelpScreen";
+import ReportScreen from "../../Screens/ReportScreen";
 import ExpensesScreen from "../../Screens/ExpensesScreen";
 
 import BudgetScreen from "../../Screens/BudgetScreen";
@@ -24,7 +24,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
   console.log(userId + "bottomnavbar");
   return (
     <Tab.Navigator
-      initialRouteName="newProblem"
+      initialRouteName="home"
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,
@@ -79,7 +79,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
       />
       <Tab.Screen
         name="newProblem2"
-        component={HelpScreen}
+        component={ReportScreen}
         initialParams={{ userId: userId }}
         options={{
           tabBarLabel: ({ focused }) => (
@@ -116,7 +116,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
           ),
           tabBarIcon: ({ focused }) => (
             <View style={[styles.tabItem, focused && styles.tabThings]}>
-              {focused ? <SettingsIcon /> : <SettingsIconDis />}
+              {focused ? <ExpenseIcon /> : <ExpenseIconDis />}
             </View>
           ),
         }}

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./StylesShowAllBudgetDetails";
@@ -459,6 +460,12 @@ const ShowAllBudgetDetails = ({ route }) => {
           data={budgetDetails}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={fetchBudgetDetails}
+            />
+          }
         />
       )}
       <Modal
@@ -497,7 +504,7 @@ const ShowAllBudgetDetails = ({ route }) => {
                     {/* Call renderDatePicker() without the conditional */}
                     {renderDatePicker()}
                     <Text style={styles.datePickerText}>
-                      StartDate: {formatDate(selectedDate)}
+                      From: {formatDate(selectedDate)}
                     </Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -508,7 +515,7 @@ const ShowAllBudgetDetails = ({ route }) => {
                     {/* Call renderDatePicker2() without the conditional */}
                     {renderDatePicker2()}
                     <Text style={styles.datePickerText}>
-                      EndDate: {formatDate(selectedEndDate)}
+                      To: {formatDate(selectedEndDate)}
                     </Text>
                   </TouchableOpacity>
                 </View>

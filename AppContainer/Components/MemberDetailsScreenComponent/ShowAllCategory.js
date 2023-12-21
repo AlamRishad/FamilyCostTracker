@@ -52,7 +52,7 @@ const ShowAllDetails = ({ route }) => {
       ) : (
         <FlatList
           data={categories}
-          key={numColumns} // Use numColumns as part of the key
+          key={numColumns}
           keyExtractor={(item) => item.categoryID.toString()}
           numColumns={numColumns}
           renderItem={({ item }) => (

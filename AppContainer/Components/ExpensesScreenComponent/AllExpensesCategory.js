@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
+  RefreshControl,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./StyleAllExpenses";
@@ -266,6 +267,12 @@ const ShowAllexpenseDetails = ({ route }) => {
           data={expenseDetails}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={fetchexpenseDetails}
+            />
+          }
         />
       )}
       <Modal

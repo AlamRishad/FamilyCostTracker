@@ -169,6 +169,8 @@ const styles = StyleSheet.create({
   },
   categoryContainer: {
     height: height * 0.45,
+    justifyContent: "center",
+    alignItems: "center",
   },
   text: {
     fontSize: 20,

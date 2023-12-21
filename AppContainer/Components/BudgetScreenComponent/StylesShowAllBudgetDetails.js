@@ -47,12 +47,12 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   detailText: {
-    fontSize: 14,
+    fontSize: 13,
     textAlign: "center",
     width: width * 0.17,
   },
   detailTextTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: "bold",
     textAlign: "center",
     width: width * 0.17,
