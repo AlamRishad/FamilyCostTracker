@@ -16,6 +16,8 @@ const imageSize = width * 0.1;
 
 function Topbar({ route }) {
   console.log(route, "top");
+  const { userId } = route.params;
+  console.log(userId + "top");
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -40,7 +42,7 @@ function Topbar({ route }) {
         style={styles.button2}
         activeOpacity={0.5}
         onPress={() => {
-          navigation.navigate("Profile");
+          navigation.navigate("Profile", { userId: userId });
         }}
       >
         <Image
@@ -104,12 +106,12 @@ const styles = StyleSheet.create({
   },
 
   labelText: {
-    fontSize: 12,
+    fontSize: 15,
     color: "white",
     fontWeight: "bold",
   },
   labelText2: {
-    fontSize: 8,
+    fontSize: 11,
     color: "white",
     fontWeight: "bold",
   },

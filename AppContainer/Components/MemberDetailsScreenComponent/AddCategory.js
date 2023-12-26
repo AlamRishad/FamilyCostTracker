@@ -31,6 +31,7 @@ const AddCategory = ({ route }) => {
   const [category, setCategory] = useState(initialCategoryState);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [categoryError, setCategoryError] = useState(null);
 
   useFocusEffect(
     useCallback(() => {
@@ -39,17 +40,17 @@ const AddCategory = ({ route }) => {
       fetchCategories();
       setError(null);
 
-      return () => {
-        // Optional cleanup actions when the screen goes out of focus
-      };
+      setCategoryError(null);
+
+      return () => {};
     }, [familyMemberID, userId])
   );
 
   const onSubmit = async () => {
     setIsSubmitting(true);
     if (!category.Name) {
-      console.error("The name field cannot be empty.");
-      setError("The name field cannot be empty.");
+      // console.error("The name field cannot be empty.");
+      setCategoryError("The name field cannot be empty.");
       setIsSubmitting(false);
       return;
     }
@@ -62,7 +63,9 @@ const AddCategory = ({ route }) => {
       });
 
       if (result) {
+        setCategoryError(null);
         fetchCategories();
+
         console.log("Category submitted", result);
       } else {
         console.log("Category added, but no details returned from the server.");
@@ -73,12 +76,16 @@ const AddCategory = ({ route }) => {
         userId: category.UserID,
       });
       setCategory(initialCategoryState);
-
+      setCategoryError(null);
       setError("");
       fetchCategories();
     } catch (err) {
-      console.error("Submission error:", err);
-      setError(err.toString());
+      if (err == "Error: Failed to add category") {
+        setCategoryError("This category already exists.");
+      } else {
+        console.error("Submission error:", err);
+        setCategoryError(err.toString());
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -122,6 +129,9 @@ const AddCategory = ({ route }) => {
           value={category.Name}
           onChangeText={(text) => handleInputChange("Name", text)}
         />
+        {categoryError !== "" ? (
+          <Text style={styles.error2}>{categoryError}</Text>
+        ) : null}
 
         <TouchableOpacity
           style={[styles.addCategory, styles.addCategoryText]}
@@ -218,6 +228,11 @@ const styles = StyleSheet.create({
     color: "red",
     textAlign: "center",
     marginVertical: 8,
+  },
+  error2: {
+    color: "red",
+    textAlign: "center",
+    width: width * 0.9,
   },
   categoryItemHead: {
     backgroundColor: "#EFF3FB",

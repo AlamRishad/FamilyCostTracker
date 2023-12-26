@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,11 +7,84 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-
+import { fetchAllBudgetDetails } from "../../API/budgetApi";
+import { fetchTransectionExpenses } from "../../API/TransectionGetDetails";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import ProfileImage from "../../../assets/splash.png";
+import { useRoute } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
+import { fetchUserDetails } from "../../API/getAllUser";
 const Profile = () => {
+  const [budgetDetails, setBudgetDetails] = useState([]);
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  const [expenseDetails, setExpenseDetails] = useState([]);
+  const [totalExpenseAmount, setTotalExpenseAmount] = useState(0);
+
+  const [userName, setUserName] = useState("");
+  const route = useRoute();
+  const userId = route.params?.userId;
+  console.log(userId);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAllBudgetDetails(userId)
+        .then((data) => {
+          // console.log(data);
+          setBudgetDetails(data);
+          calculateTotalAmount(data);
+        })
+        .catch((error) =>
+          console.error("Error fetching budget details:", error)
+        );
+
+      return () => {};
+    }, [userId])
+  );
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchTransectionExpenses(userId)
+        .then((data) => {
+          //console.log(data);
+          setExpenseDetails(data);
+          calculateTotalAmount2(data);
+        })
+        .catch((error) =>
+          console.error("Error fetching expense details:", error)
+        );
+
+      return () => {};
+    }, [userId])
+  );
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchUserDetails(userId)
+        .then((data) => {
+          console.log(data);
+          setUserName(data.username);
+        })
+        .catch((error) => console.error("Error fetching user details:", error));
+
+      return () => {};
+    }, [userId])
+  );
+
+  const calculateTotalAmount = (data) => {
+    const total = data.reduce(
+      (acc, item) => acc + parseFloat(item.amount || 0),
+      0
+    );
+    setTotalAmount(total);
+  };
+  const calculateTotalAmount2 = (data) => {
+    const total = data.reduce(
+      (acc, item) => acc + parseFloat(item.differenceFromPreviousRow || 0),
+      0
+    );
+    setTotalExpenseAmount(total);
+  };
+
   const navigation = useNavigation();
   const handlePrivacyPress = async () => {
     navigation.navigate("PrivacyScreen");
@@ -32,17 +105,19 @@ const Profile = () => {
 
         <View style={styles.profileSection}>
           <Image source={ProfileImage} style={styles.profilePic} />
-          <Text style={styles.name}>Mahfuzul Alam Rishad</Text>
+          <Text style={styles.name}>{userName}</Text>
           <View style={styles.financeContainer}>
             <View style={styles.incomeContainer}>
-              <Text style={styles.moneyText}>Income</Text>
-              <Text style={styles.amount}>৳2,400.00</Text>
+              <Text style={styles.moneyText}>Budget</Text>
+              <Text style={styles.amount}>৳{totalAmount.toFixed(2)}</Text>
             </View>
 
             <View style={styles.divider} />
             <View style={styles.expenseContainer}>
               <Text style={styles.moneyText}>Expense</Text>
-              <Text style={styles.amount}>৳670.00</Text>
+              <Text style={styles.amount}>
+                ৳{totalExpenseAmount.toFixed(2)}
+              </Text>
             </View>
           </View>
         </View>
@@ -50,7 +125,7 @@ const Profile = () => {
           <Text style={styles.generalText2}>Edit Profile</Text>
           <TouchableOpacity
             onPress={() => {
-              /* handle security */
+              navigation.navigate("EditUserNameScreen", { userId: userId });
             }}
             style={styles.generalView}
           >
@@ -61,7 +136,7 @@ const Profile = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              /* handle security */
+              navigation.navigate("EditPasswordScreen", { userId: userId });
             }}
             style={styles.generalView}
           >
@@ -72,7 +147,7 @@ const Profile = () => {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              /* handle security */
+              navigation.navigate("EditEmailScreen", { userId: userId });
             }}
             style={styles.generalView}
           >

@@ -26,19 +26,22 @@ const Loginpage = () => {
   const navigation = useNavigation();
   const handleForgotPress = async () => {
     navigation.navigate("ForgotPasswordScreen");
+    setErrorMessage(null);
   };
   const handleRegister = async () => {
     navigation.navigate("RegisterScreen");
+    setErrorMessage(null);
   };
 
   const handleLoginPress = async () => {
-    // navigation.navigate("MainApp", { userId: email });
     const result = await login(email, password);
     if (result.success) {
       console.log("Response Body:", result.body);
       const userId = result.body.userId;
       console.log(userId + "login page");
       navigation.navigate("MainApp", { userId: userId });
+      setEmail("");
+      setPassword("");
     } else {
       setErrorMessage(result.message);
     }
@@ -55,7 +58,7 @@ const Loginpage = () => {
             (x, y, width, height, pageX, pageY) => {
               const bottomOfField = pageY + height;
               const topOfKeyboard = e.endCoordinates.screenY;
-              const gap = bottomOfField - topOfKeyboard + 20; // Add some extra space (20 pixels) above the keyboard
+              const gap = bottomOfField - topOfKeyboard + 20;
 
               if (gap > 0) {
                 scrollViewRef.current.scrollTo({

@@ -13,16 +13,15 @@ export const addCategory = async (categoryData) => {
     throw new Error("Failed to add category");
   }
 
-  const text = await response.text(); // Get the response text
+  const text = await response.text();
   try {
-    return JSON.parse(text); // Attempt to parse it as JSON
+    return JSON.parse(text);
   } catch (error) {
     if (text === "") {
-      // Handle empty response
       console.log("Category added, but no details returned from the server.");
       return null;
     } else {
-      throw error; // Re-throw the parsing error
+      throw error;
     }
   }
 };

@@ -79,11 +79,15 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     padding: 20,
+    paddingTop: 5,
     backgroundColor: "#f5f5f5", // change as per your theme
     height: height * 0.9,
     paddingBottom: height * 0.15,
   },
   itemHeader: {
+    paddingBottom: height * 0.01,
+
+    paddingTop: height * 0.01,
     borderRadius: 5,
     backgroundColor: "#EFF3FB",
     // paddingRight: width * 0.04,
@@ -98,6 +102,9 @@ const styles = StyleSheet.create({
     width: width * 0.17,
   },
   header: {
+    paddingBottom: height * 0.01,
+
+    paddingTop: height * 0.01,
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 20,

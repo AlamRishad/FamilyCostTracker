@@ -58,3 +58,22 @@ export const getCategoriesByFamilyMember = async (familyMemberID) => {
     throw error;
   }
 };
+
+export const fetchUserDetails = async (userId) => {
+  try {
+    // console.log(userId + "jire");
+    const response = await fetch(`${BASE_URL}/GetUser/${userId}`);
+    //console.log(response);
+
+    if (!response.ok) {
+      throw new Error("User not found");
+    }
+
+    const user = await response.json();
+    console.log("User details:", user);
+    return user;
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    throw error;
+  }
+};

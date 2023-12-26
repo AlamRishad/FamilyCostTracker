@@ -14,6 +14,9 @@ import MemberDetailsScreen from "../../Screens/MemberDetailsScreen";
 import ExpensesScreen from "../../Screens/ExpensesScreen";
 import BudgetScreen from "../../Screens/BudgetScreen";
 import ReportScreen from "../../Screens/ReportScreen";
+import EditUserNameScreen from "../../Screens/EditUserNameScreen";
+import EditPasswordScreen from "../../Screens/EditPasswordScreen";
+import EditEmailScreen from "../../Screens/EditEmailScreen";
 const Stack = createNativeStackNavigator();
 export default function AppStackNavigator() {
   return (
@@ -51,6 +54,11 @@ export default function AppStackNavigator() {
       <Stack.Screen name="BudgetScreen" component={BudgetScreen} />
 
       <Stack.Screen name="ReportScreen" component={ReportScreen} />
+      <Stack.Screen name="EditUserNameScreen" component={EditUserNameScreen} />
+
+      <Stack.Screen name="EditPasswordScreen" component={EditPasswordScreen} />
+
+      <Stack.Screen name="EditEmailScreen" component={EditEmailScreen} />
     </Stack.Navigator>
   );
 }

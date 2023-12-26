@@ -89,7 +89,7 @@ const BottomTabNavigator = ({ route, navigation }) => {
                 { color: focused ? "#205578" : "#ffffff" },
               ]}
             >
-              Report
+              Transection
             </Text>
           ),
           tabBarIcon: ({ focused }) => (

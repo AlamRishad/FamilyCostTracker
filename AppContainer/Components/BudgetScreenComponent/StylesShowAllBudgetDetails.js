@@ -175,4 +175,25 @@ export const styles = StyleSheet.create({
     padding: 2,
     textAlign: "center",
   },
+  plusIcon: {
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    width: width * 0.17,
+  },
+  plusText: {
+    backgroundColor: "#6EEA00",
+
+    width: 20,
+    height: 20,
+    borderRadius: 12,
+    textAlign: "center",
+    color: "white",
+    fontSize: 14,
+  },
+  errorMessage: {
+    color: "red",
+    textAlign: "center",
+    width: width * 0.86,
+  },
 });

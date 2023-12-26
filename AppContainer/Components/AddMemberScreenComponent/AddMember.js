@@ -19,6 +19,7 @@ const Dropdown = ({ options, onSelect, route }) => {
   const [selectedOption, setSelectedOption] = useState("");
   const animatedHeight = useRef(new Animated.Value(0)).current;
   const [fullName, setFullName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const toggleDropdown = () => {
     Animated.timing(animatedHeight, {
@@ -38,6 +39,19 @@ const Dropdown = ({ options, onSelect, route }) => {
   const navigation = useNavigation();
 
   const addFamilyMember = () => {
+    setErrorMessage("");
+
+    // Validation for fullName
+    if (!fullName || fullName.trim() === "") {
+      setErrorMessage("Please enter the full name.");
+      return;
+    }
+
+    // Validation for selectedOption
+    if (!selectedOption) {
+      setErrorMessage("Please select a relationship option.");
+      return;
+    }
     console.log("Submitting form...");
 
     createFamilyMember(fullName, selectedOption, userId)
@@ -81,7 +95,9 @@ const Dropdown = ({ options, onSelect, route }) => {
           </ScrollView>
         </Animated.View>
       )}
-
+      {errorMessage !== "" && (
+        <Text style={styles.errorMessage}>{errorMessage}</Text>
+      )}
       <TouchableOpacity style={styles.loginBtn} onPress={addFamilyMember}>
         <Text style={styles.buttonText}>Add Member</Text>
       </TouchableOpacity>
@@ -98,8 +114,10 @@ const FamilyMemberForm = ({ route }) => {
         options={[
           "Mother",
           "Father",
-          "Sibling",
-          "Spouse",
+          "Brother",
+          "Sister",
+          "Wife",
+          "Husband",
           "Child",
           "Grandparent",
           "Grandchild",
@@ -119,9 +137,6 @@ const FamilyMemberForm = ({ route }) => {
           "Sister-in-law",
           "Brother-in-law",
           "Partner",
-          "Fiancé/Fiancée",
-          "Godparent",
-          "Godchild",
           "Friend",
           "Guardian",
           "Ward",
@@ -143,6 +158,10 @@ const styles = StyleSheet.create({
     padding: windowWidth * 0.045,
     borderRadius: 21,
     alignItems: "center",
+  },
+  errorMessage: {
+    color: "red",
+    textAlign: "center",
   },
   buttonText: {
     fontWeight: "600",

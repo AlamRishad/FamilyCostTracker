@@ -24,6 +24,23 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  negativeRemaining: {
+    backgroundColor: "red",
+    color: "white",
+  },
+  errorContainer: {
+    // flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 14,
+    // paddingRight: width * 0.021,
+    textAlign: "center",
+    justifyContent: "center",
+    width: width * 0.8,
+  },
   categoryItemTitle: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -43,7 +60,6 @@ export const styles = StyleSheet.create({
   modalContentContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    // justifyContent: "space-between",
     alignItems: "center",
   },
   detailText: {
@@ -162,5 +178,31 @@ export const styles = StyleSheet.create({
     marginVertical: 8,
     padding: 2,
     textAlign: "center",
+  },
+  plusIcon: {
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    width: width * 0.17,
+  },
+  plusText: {
+    backgroundColor: "#6EEA00",
+
+    width: 18,
+    height: 18,
+    borderRadius: 12,
+    textAlign: "center",
+    color: "white",
+    fontSize: 13,
+  },
+  plusTextTitle: {
+    backgroundColor: "white",
+
+    width: 20,
+    height: 20,
+    borderRadius: 12,
+    textAlign: "center",
+    color: "white",
+    fontSize: 14,
   },
 });

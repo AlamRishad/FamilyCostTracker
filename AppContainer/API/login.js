@@ -49,7 +49,102 @@ export const registerUser = async (userData) => {
 
     return await response.json();
   } catch (error) {
-    console.error("Registration error:", error);
+    //console.error("Registration error:", error);
     throw error;
+  }
+};
+
+export const forgotPassword = async (username, email, newPassword) => {
+  try {
+    const response = await fetch(`${BASE_URL}/forgotpassword`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        newPassword,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return { success: true, data };
+    } else {
+      return {
+        success: false,
+        message: data.message || "Failed to change the password",
+      };
+    }
+  } catch (error) {
+    return { success: false, message: error.toString() };
+  }
+};
+
+export const updateUsername = async (userId, newUsername, newPasswordHash) => {
+  console.log(userId + " " + newUsername + " " + newPasswordHash);
+  try {
+    const response = await fetch(
+      `${BASE_URL}/UpdateUsername/${userId}?newPasswordHash=${newPasswordHash}&newUsername=${newUsername}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          UserId: userId,
+          PasswordHash: newPasswordHash,
+          Username: newUsername,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const message = await response.text();
+      return { success: true, message };
+    } else {
+      const errorData = await response.text();
+      return {
+        success: false,
+        message: errorData || "Failed to update the username",
+      };
+    }
+  } catch (error) {
+    return { success: false, message: error.toString() };
+  }
+};
+
+export const updateEmail = async (userId, newEmail, newPasswordHash) => {
+  console.log(userId + " " + newEmail + " " + newPasswordHash);
+  try {
+    const response = await fetch(
+      `${BASE_URL}/UpdateUsername/${userId}?newPasswordHash=${newPasswordHash}&newUsername=${newUsername}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          UserId: userId,
+          PasswordHash: newPasswordHash,
+          Username: newUsername,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const message = await response.text();
+      return { success: true, message };
+    } else {
+      const errorData = await response.text();
+      return {
+        success: false,
+        message: errorData || "Failed to update the username",
+      };
+    }
+  } catch (error) {
+    return { success: false, message: error.toString() };
   }
 };

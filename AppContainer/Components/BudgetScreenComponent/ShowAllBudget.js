@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./StylesShowAllBudgetDetails";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
@@ -28,20 +29,20 @@ const ShowAllBudgetDetails = ({ route }) => {
   const [isModalVisible, setIsModalVisible] = useState(false); // Add this state for controlling modal visibility
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [category, setCategory] = useState();
-  const [periodicity, setPeriodicity] = useState(""); // Add this to your state definitions
+  const [periodicity, setPeriodicity] = useState("");
 
   const [inputAmount, setInputAmount] = useState("");
-  // ... groupByFamilyMember and useEffect logic
   const [isStartDatePickerVisible, setStartDatePickerVisibility] =
     useState(false);
   const [isEndDatePickerVisible, setEndDatePickerVisibility] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedEndDate, setSelectedEndDate] = useState(new Date());
 
   useFocusEffect(
     useCallback(() => {
       fetchBudgetDetails();
+      setErrorMessage("");
       return () => {};
     }, [userId])
   );
@@ -55,6 +56,22 @@ const ShowAllBudgetDetails = ({ route }) => {
       periodicity: periodicity,
       familyMemberID: selectedCategory.familyMemberID,
     };
+    setErrorMessage("");
+
+    if (!inputAmount) {
+      setErrorMessage("Please enter an amount.");
+      return;
+    }
+    if (selectedEndDate < selectedDate) {
+      setErrorMessage(
+        "End date must be greater than or equal to the start date."
+      );
+      return false;
+    }
+    if (!periodicity) {
+      setErrorMessage("Please select a periodicity.");
+      return;
+    }
 
     try {
       let response;
@@ -133,7 +150,7 @@ const ShowAllBudgetDetails = ({ route }) => {
   };
 
   const renderDatePicker = () => {
-    const years = Array.from({ length: 2050 - 2021 + 1 }, (_, i) => 2021 + i);
+    const years = Array.from({ length: 2050 - 1970 + 1 }, (_, i) => 1970 + i);
 
     const months = [...Array(12)].map((_, i) => i + 1);
     const days = [
@@ -221,7 +238,7 @@ const ShowAllBudgetDetails = ({ route }) => {
     );
   };
   const renderDatePicker2 = () => {
-    const years = Array.from({ length: 2050 - 2021 + 1 }, (_, i) => 2021 + i);
+    const years = Array.from({ length: 2050 - 1970 + 1 }, (_, i) => 1970 + i);
     const months = [...Array(12)].map((_, i) => i + 1);
     const days = [
       ...Array(
@@ -431,7 +448,14 @@ const ShowAllBudgetDetails = ({ route }) => {
             <TouchableOpacity key={index} onPress={() => openModal(category)}>
               <View style={styles.categoryItem}>
                 <Text style={styles.detailText}>{category.categoryName}</Text>
-                <Text style={styles.detailText}>{category.amount}</Text>
+                {category.amount !== null ? (
+                  <Text style={styles.detailText}>{category.amount}</Text>
+                ) : (
+                  <View style={styles.plusIcon}>
+                    <Text style={styles.plusText}>+</Text>
+                  </View>
+                )}
+                {/* <Text style={styles.detailText}>{category.amount}</Text> */}
                 <Text style={styles.detailText}>
                   {category.startDate
                     ? category.startDate.split("T")[0]
@@ -442,7 +466,9 @@ const ShowAllBudgetDetails = ({ route }) => {
                     ? category.endDate.split("T")[0]
                     : "EndDate"}
                 </Text>
-                <Text style={styles.detailText}>{category.periodicity}</Text>
+                <Text style={styles.detailText}>
+                  {category.periodicity ? category.periodicity : "Periodicity"}
+                </Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -533,6 +559,9 @@ const ShowAllBudgetDetails = ({ route }) => {
                     <Picker.Item label="Monthly" value="Monthly" />
                   </Picker>
                 </View>
+                {errorMessage !== "" && (
+                  <Text style={styles.errorMessage}>{errorMessage}</Text>
+                )}
                 <TouchableOpacity
                   style={styles.saveButton}
                   onPress={saveCategoryDetails}
@@ -542,7 +571,10 @@ const ShowAllBudgetDetails = ({ route }) => {
 
                 <TouchableOpacity
                   style={styles.closeButton}
-                  onPress={() => setIsModalVisible(false)}
+                  onPress={() => {
+                    setIsModalVisible(false);
+                    setErrorMessage("");
+                  }}
                 >
                   <Text style={styles.textStyle}>Close</Text>
                 </TouchableOpacity>

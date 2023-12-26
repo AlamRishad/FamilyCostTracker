@@ -10,77 +10,45 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-
+import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import LogoImage from "../../../assets/splash.png";
-import { registerUser } from "../../API/login";
-
-const Register = () => {
+import { updateEmail } from "../../API/login";
+const EditUserEmail = () => {
+  const route = useRoute();
+  const userId = route.params?.userId;
+  console.log(userId);
   const [keyboardStatus, setKeyboardStatus] = useState(false);
   const scrollViewRef = useRef(null);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [passwordX, setPasswordX] = useState(0);
   const [passwordY, setPasswordY] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
-
-  const [password2, setPassword2] = useState("");
-  const navigation = useNavigation();
-  const [errorMessage, setErrorMessage] = useState("");
   const emailRegex = /\S+@\S+\.\S+/;
+  const navigation = useNavigation();
+  const handleForgotPasswordPress = async () => {
+    setErrorMessage("");
 
-  //   const handleForgotPress = async () => {
-  //     navigation.navigate("ForgotPasswordScreen");
-  //   };
-  const handleLoginPress = async () => {
-    navigation.navigate("LoginScreen");
-  };
-  const handleRegistrationPress = async () => {
-    // Input validation
-
-    if (!userName.trim()) {
-      setErrorMessage("Username is required.");
-      return;
-    }
+    const result = await updateEmail(userId, email, password);
     if (!emailRegex.test(email.trim())) {
       setErrorMessage("Please enter a valid email address.");
       return;
     }
+
     if (!password) {
       setErrorMessage("Password is required.");
       return;
     }
-    if (password.length < 8) {
-      setErrorMessage("The password must be at least 8 characters long.");
-      return;
-    }
-    if (password !== password2) {
-      setErrorMessage("Passwords do not match.");
-      return;
-    }
-
-    const newUser = {
-      username: userName.trim(),
-      passwordHash: password,
-      email: email.trim(),
-    };
-
-    try {
-      const registeredUser = await registerUser(newUser);
-      console.log("User registered:", registeredUser);
-      setEmail("");
-      setPassword("");
-      setUserName("");
-      setErrorMessage("");
-      navigation.navigate("LoginScreen");
-    } catch (error) {
-      setErrorMessage(
-        error.response?.data?.message || "This Email has been already taken."
-      );
+    if (result.success) {
+      //   setErrorMessage("UserName changed successfully");
+      setTimeout(() => navigation.navigate("Profile", { userId: userId }), 100);
+    } else {
+      setErrorMessage(result.message);
     }
   };
-
   const passwordInputRef = useRef(null);
 
   useEffect(() => {
@@ -92,7 +60,7 @@ const Register = () => {
             (x, y, width, height, pageX, pageY) => {
               const bottomOfField = pageY + height;
               const topOfKeyboard = e.endCoordinates.screenY;
-              const gap = bottomOfField - topOfKeyboard + 20; // Add some extra space (20 pixels) above the keyboard
+              const gap = bottomOfField - topOfKeyboard + 20;
 
               if (gap > 0) {
                 scrollViewRef.current.scrollTo({
@@ -139,18 +107,12 @@ const Register = () => {
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.title}>Registration</Text>
+        <Text style={styles.title}>Change Email</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your UserName"
-          onChangeText={setUserName}
-          value={userName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your email"
+          placeholder="Enter your new email"
           onChangeText={setEmail}
-          value={email}
+          value={userName}
         />
 
         <TextInput
@@ -160,7 +122,7 @@ const Register = () => {
             setPasswordY(layout.y);
           }}
           style={styles.input}
-          placeholder="Enter your new password "
+          placeholder="Enter your password "
           onChangeText={setPassword}
           value={password}
           secureTextEntry={true}
@@ -173,30 +135,11 @@ const Register = () => {
           }}
           // secureTextEntry={true}
         />
-        <TextInput
-          onLayout={(event) => {
-            const layout = event.nativeEvent.layout;
-            setPasswordX(layout.x);
-            setPasswordY(layout.y);
-          }}
-          style={styles.input}
-          placeholder="Enter your confirm password "
-          onChangeText={setPassword2}
-          value={password2}
-          secureTextEntry={true}
-          onFocus={() => {
-            scrollViewRef.current.scrollTo({
-              x: passwordX,
-              y: passwordY,
-              animated: true,
-            });
-          }}
-          // secureTextEntry={true}
-        />
+
         {errorMessage !== "" && (
           <Text style={styles.errorMessage}>{errorMessage}</Text>
         )}
-        <TouchableOpacity onPress={handleRegistrationPress}>
+        <TouchableOpacity onPress={handleForgotPasswordPress}>
           <View style={styles.loginBtn}>
             <Text style={styles.buttonText}>Confirm</Text>
           </View>
@@ -214,9 +157,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: windowHeight * 0.09,
     backgroundColor: "white",
-  },
-  errorMessage: {
-    color: "red",
   },
   icons: {
     // marginBottom: windowHeight * 0.038,
@@ -287,6 +227,11 @@ const styles = StyleSheet.create({
     fontSize: windowHeight * 0.02,
     color: "#205578",
   },
+  errorMessage: {
+    color: "red",
+    textAlign: "center",
+    // marginVertical: 10,
+  },
 });
 
-export default Register;
+export default EditUserEmail;

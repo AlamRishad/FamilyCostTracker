@@ -86,11 +86,16 @@ const ShowAllexpenseDetails = ({ route }) => {
       console.log("Budget detail saved successfully: ", response);
     } catch (error) {
       console.log("update");
-      setIsModalVisible(false);
+      // setIsModalVisible(false);
       if (error.message === "Property 'log' doesn't exist") {
+        setIsModalVisible(false);
+        setModalErrorMessage(null);
         fetchexpenseDetails();
       } else {
-        console.error("Failed to save budget detail: ", error);
+        setModalErrorMessage(
+          "Please add a category Budget and give a valid amount."
+        );
+        // console.error("Failed to save budget detail: ", error);
       }
     }
   };
@@ -100,6 +105,8 @@ const ShowAllexpenseDetails = ({ route }) => {
   const [expenseDetails, setexpenseDetails] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [expandedSections, setExpandedSections] = useState({});
+  const [errorMessage, setErrorMessage] = useState("");
+  const [modalErrorMessage, setModalErrorMessage] = useState("");
 
   const toggleSection = (familyMemberID) => {
     console.log(familyMemberID);
@@ -140,13 +147,16 @@ const ShowAllexpenseDetails = ({ route }) => {
 
   const fetchexpenseDetails = async () => {
     setIsLoading(true);
-    setError(null); // Clear any existing errors
+    setError(null);
+
+    setErrorMessage(null);
     try {
       const response = await fetchAllExpenseDetails(userId);
       const groupedexpenseDetails = groupByFamilyMember(response);
       setexpenseDetails(groupedexpenseDetails);
     } catch (error) {
-      setError("Please Add Category");
+      setErrorMessage("Please Add Category");
+      // setError("Please Add Category");
     } finally {
       setIsLoading(false);
     }
@@ -169,7 +179,9 @@ const ShowAllexpenseDetails = ({ route }) => {
         if (error.message === "Cannot read property 'forEach' of undefined") {
           return;
         }
-        console.error("An error occurred while fetching budget details", error);
+        setErrorMessage("An error occurred while fetching budget details");
+
+        // console.error("An error occurred while fetching budget details", error);
       } finally {
         setIsLoading(false);
       }
@@ -225,6 +237,8 @@ const ShowAllexpenseDetails = ({ route }) => {
               <Text style={styles.detailTextTitle}>Category Name</Text>
               <Text style={styles.detailTextTitle}>Budget</Text>
               <Text style={styles.detailTextTitle}>Expense</Text>
+              <Text style={styles.plusTextTitle}>+</Text>
+              {/* <Text style={styles.detailTextTitle}> </Text> */}
               <Text style={styles.detailTextTitle}>Remaining</Text>
             </View>
 
@@ -238,7 +252,15 @@ const ShowAllexpenseDetails = ({ route }) => {
                       ? category.expenseAmount
                       : "0"}
                   </Text>
-                  <Text style={styles.detailText}>
+                  <Text style={styles.plusText}>+</Text>
+                  <Text
+                    style={[
+                      styles.detailText,
+                      category.amount - (category.expenseAmount || 0) < 0
+                        ? styles.negativeRemaining
+                        : {},
+                    ]}
+                  >
                     {category.amount - (category.expenseAmount || 0)}
                   </Text>
                 </View>
@@ -246,9 +268,10 @@ const ShowAllexpenseDetails = ({ route }) => {
             ))}
             <View style={styles.categoryItemTitle}>
               <Text style={styles.detailTextTitle}>Total</Text>
-              <Text style={styles.detailText}>{totalBudget}</Text>
-              <Text style={styles.detailText}>{totalExpenses}</Text>
-              <Text style={styles.detailText}>{totalRemaining}</Text>
+              <Text style={styles.detailTextTitle}>{totalBudget}</Text>
+              <Text style={styles.detailTextTitle}>{totalExpenses}</Text>
+              <Text style={styles.plusTextTitle}>+</Text>
+              <Text style={styles.detailTextTitle}>{totalRemaining}</Text>
             </View>
           </>
         )}
@@ -258,10 +281,15 @@ const ShowAllexpenseDetails = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {errorMessage && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        </View>
+      )}
       {isLoading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : error ? (
-        <Text style={styles.errorText}>{error}</Text> // Display the error message
+        <Text style={styles.errorText}>{error}</Text>
       ) : (
         <FlatList
           data={expenseDetails}
@@ -302,6 +330,9 @@ const ShowAllexpenseDetails = ({ route }) => {
                     value={inputAmount}
                     keyboardType="numeric"
                   />
+                  {modalErrorMessage && (
+                    <Text style={styles.errorMessage}>{modalErrorMessage}</Text>
+                  )}
                 </View>
 
                 <TouchableOpacity
@@ -313,7 +344,10 @@ const ShowAllexpenseDetails = ({ route }) => {
 
                 <TouchableOpacity
                   style={styles.closeButton}
-                  onPress={() => setIsModalVisible(false)}
+                  onPress={() => {
+                    setIsModalVisible(false);
+                    setModalErrorMessage(null);
+                  }}
                 >
                   <Text style={styles.textStyle}>Close</Text>
                 </TouchableOpacity>

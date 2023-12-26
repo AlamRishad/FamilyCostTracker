@@ -41,7 +41,7 @@ export const createExpenseDetail = async (budgetData) => {
     if (error.message === "JSON Parse error: Unexpected end of input") {
       return;
     }
-    console.error("Budget error:", error);
+    // console.error("Budget error:", error);
     throw error;
   }
 };
