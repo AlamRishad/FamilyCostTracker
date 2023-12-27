@@ -50,7 +50,7 @@ const ForgotPassword = () => {
 
     if (result.success) {
       setErrorMessage("Password changed successfully");
-      setTimeout(() => navigation.navigate("LoginScreen"), 1500);
+      navigation.navigate("Profile", { userId: userId });
     } else {
       setErrorMessage(result.message);
     }

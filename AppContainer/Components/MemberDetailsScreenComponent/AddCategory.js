@@ -13,7 +13,6 @@ import {
 } from "react-native";
 
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
-import { Picker } from "@react-native-picker/picker";
 import { addCategory } from "../../API/CategoryApi";
 
 import { getCategoriesByFamilyMember } from "../../API/getAllUser";
@@ -49,7 +48,6 @@ const AddCategory = ({ route }) => {
   const onSubmit = async () => {
     setIsSubmitting(true);
     if (!category.Name) {
-      // console.error("The name field cannot be empty.");
       setCategoryError("The name field cannot be empty.");
       setIsSubmitting(false);
       return;

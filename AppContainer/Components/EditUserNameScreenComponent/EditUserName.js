@@ -44,7 +44,7 @@ const EditUserName = () => {
     }
     if (result.success) {
       //   setErrorMessage("UserName changed successfully");
-      setTimeout(() => navigation.navigate("Profile", { userId: userId }), 100);
+      navigation.navigate("Profile", { userId: userId });
     } else {
       setErrorMessage(result.message);
     }

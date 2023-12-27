@@ -13,7 +13,6 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./StylesShowAllBudgetDetails";
-import Icon from "react-native-vector-icons/FontAwesome";
 
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback } from "react";
@@ -26,7 +25,7 @@ import {
 } from "../../API/getBudgetDetails";
 
 const ShowAllBudgetDetails = ({ route }) => {
-  const [isModalVisible, setIsModalVisible] = useState(false); // Add this state for controlling modal visibility
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [category, setCategory] = useState();
   const [periodicity, setPeriodicity] = useState("");

@@ -44,7 +44,7 @@ const EditUserEmail = () => {
     }
     if (result.success) {
       //   setErrorMessage("UserName changed successfully");
-      setTimeout(() => navigation.navigate("Profile", { userId: userId }), 100);
+      navigation.navigate("Profile", { userId: userId });
     } else {
       setErrorMessage("This user email already exist");
     }
