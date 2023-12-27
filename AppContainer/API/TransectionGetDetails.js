@@ -1,9 +1,9 @@
-const BASE_URL = "http://192.168.2.216:1515";
+import { API_URL } from "./config";
 
 export const fetchTransectionExpenses = async (userId) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/api/Transection/GetTransectionDetails/${userId}`,
+      `${API_URL}/api/Transection/GetTransectionDetails/${userId}`,
       {
         method: "GET",
         headers: {

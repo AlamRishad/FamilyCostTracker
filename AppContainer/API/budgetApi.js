@@ -1,5 +1,4 @@
-// In your API/budgetApi.js file
-const API_URL = "http://192.168.2.216:1515";
+import { API_URL } from "./config";
 export const fetchAllBudgetDetails = async (userId) => {
   try {
     const response = await fetch(`${API_URL}/api/BudgetDetails/${userId}`);

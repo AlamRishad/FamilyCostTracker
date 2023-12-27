@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://192.168.2.216:1515";
+import { API_URL } from "./config";
 
 export const updateBudgetDetails = async (budgetId, budgetData) => {
   console.log("Updating budget with data:", JSON.stringify(budgetData));
@@ -10,7 +10,7 @@ export const updateBudgetDetails = async (budgetId, budgetData) => {
 
   try {
     const response = await fetch(
-      `${API_BASE_URL}/api/Budget/${budgetId}`,
+      `${API_URL}/api/Budget/${budgetId}`,
       requestOptions
     );
     if (!response.ok) {
@@ -32,7 +32,7 @@ export const updateBudgetDetails = async (budgetId, budgetData) => {
 
 export const createBudgetDetail = async (budgetData) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/api/Budget`, {
+    const response = await fetch(`${API_URL}/api/Budget`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(budgetData),

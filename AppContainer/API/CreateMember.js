@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.2.216:1515";
+import { API_URL } from "./config";
 export const createFamilyMember = async (name, relationship, userId) => {
   console.log(userId);
   try {

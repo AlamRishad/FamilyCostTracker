@@ -1,8 +1,8 @@
-const BASE_URL = "http://192.168.2.216:1515";
+import { API_URL } from "./config";
 
 export const getAllUsers = async () => {
   try {
-    const response = await fetch(`${BASE_URL}/GetAllUser`);
+    const response = await fetch(`${API_URL}/GetAllUser`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -15,7 +15,7 @@ export const getAllUsers = async () => {
 };
 export const getFamilyMembersByUserId = async (userId) => {
   try {
-    const response = await fetch(`${BASE_URL}/api/FamilyMember/${userId}`);
+    const response = await fetch(`${API_URL}/api/FamilyMember/${userId}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -29,7 +29,7 @@ export const getFamilyMembersByUserId = async (userId) => {
 export const getFamilyMemberDetails = async (familyMemberID) => {
   try {
     let response = await fetch(
-      `${BASE_URL}/api/FamilyMember/Details/${familyMemberID}`
+      `${API_URL}/api/FamilyMember/Details/${familyMemberID}`
     );
     let responseJson = await response.json();
     return responseJson;
@@ -41,7 +41,7 @@ export const getFamilyMemberDetails = async (familyMemberID) => {
 export const getCategoriesByFamilyMember = async (familyMemberID) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/api/Category/ByFamilyMember/${familyMemberID}`,
+      `${API_URL}/api/Category/ByFamilyMember/${familyMemberID}`,
       {
         method: "GET",
       }
@@ -62,7 +62,7 @@ export const getCategoriesByFamilyMember = async (familyMemberID) => {
 export const fetchUserDetails = async (userId) => {
   try {
     // console.log(userId + "jire");
-    const response = await fetch(`${BASE_URL}/GetUser/${userId}`);
+    const response = await fetch(`${API_URL}/GetUser/${userId}`);
     //console.log(response);
 
     if (!response.ok) {

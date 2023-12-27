@@ -1,9 +1,9 @@
-const BASE_URL = "http://192.168.2.216:1515";
+import { API_URL } from "./config";
 
 export const fetchDailyExpenses = async (userId) => {
   try {
     const response = await fetch(
-      `${BASE_URL}/api/DailyExpenses/GetDailyExpenses/${userId}`,
+      `${API_URL}/api/DailyExpenses/GetDailyExpenses/${userId}`,
       {
         method: "GET",
         headers: {

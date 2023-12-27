@@ -1,7 +1,7 @@
-const BASE_URL = "http://192.168.2.216:1515";
+import { API_URL } from "./config";
 
 export const addCategory = async (categoryData) => {
-  const response = await fetch(`${BASE_URL}/api/Category`, {
+  const response = await fetch(`${API_URL}/api/Category`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

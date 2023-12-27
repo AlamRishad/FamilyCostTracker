@@ -1,10 +1,9 @@
 // api.js
-
-const BASE_URL = "http://192.168.2.216:1515";
+import { API_URL } from "./config";
 
 export const login = async (email, password) => {
   try {
-    const response = await fetch(`${BASE_URL}/Login`, {
+    const response = await fetch(`${API_URL}/Login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +34,7 @@ export const login = async (email, password) => {
 export const registerUser = async (userData) => {
   try {
     console.log(userData);
-    const response = await fetch(`${BASE_URL}/CreateUser`, {
+    const response = await fetch(`${API_URL}/CreateUser`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,7 +55,7 @@ export const registerUser = async (userData) => {
 
 export const forgotPassword = async (username, email, newPassword) => {
   try {
-    const response = await fetch(`${BASE_URL}/forgotpassword`, {
+    const response = await fetch(`${API_URL}/forgotpassword`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -87,7 +86,7 @@ export const updateUsername = async (userId, newUsername, newPasswordHash) => {
   console.log(userId + " " + newUsername + " " + newPasswordHash);
   try {
     const response = await fetch(
-      `${BASE_URL}/UpdateUsername/${userId}?newPasswordHash=${newPasswordHash}&newUsername=${newUsername}`,
+      `${API_URL}/UpdateUsername/${userId}?newPasswordHash=${newPasswordHash}&newUsername=${newUsername}`,
       {
         method: "PUT",
         headers: {
@@ -120,7 +119,7 @@ export const updateEmail = async (userId, newEmail, newPasswordHash) => {
   console.log(userId + " " + newEmail + " " + newPasswordHash);
   try {
     const response = await fetch(
-      `${BASE_URL}/UpdateUserEmail/${userId}?newPasswordHash=${newPasswordHash}&newEmail=${newEmail}`,
+      `${API_URL}/UpdateUserEmail/${userId}?newPasswordHash=${newPasswordHash}&newEmail=${newEmail}`,
       {
         method: "PUT",
         headers: {
@@ -157,7 +156,7 @@ export const updatePassword = async (
   console.log(userId + " " + oldPasswordHash + " " + newPasswordHash);
   try {
     const response = await fetch(
-      `${BASE_URL}/UpdateUserPassword/${userId}?oldPasswordHash=${oldPasswordHash}&newPasswordHash=${newPasswordHash}`,
+      `${API_URL}/UpdateUserPassword/${userId}?oldPasswordHash=${oldPasswordHash}&newPasswordHash=${newPasswordHash}`,
       {
         method: "PUT",
         headers: {
@@ -188,7 +187,7 @@ export const updatePassword = async (
 
 export const deleteUser = async (userId) => {
   try {
-    const response = await fetch(`${BASE_URL}/DeleteUser/${userId}`, {
+    const response = await fetch(`${API_URL}/DeleteUser/${userId}`, {
       method: "DELETE",
     });
 
