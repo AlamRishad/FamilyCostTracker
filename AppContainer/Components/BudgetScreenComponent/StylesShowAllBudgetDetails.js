@@ -196,4 +196,10 @@ export const styles = StyleSheet.create({
     textAlign: "center",
     width: width * 0.86,
   },
+  emptyList: {
+    fontSize: 18,
+    textAlign: "center",
+    marginTop: 20,
+    color: "#999", // change as per your theme
+  },
 });

@@ -120,7 +120,7 @@ export const updateEmail = async (userId, newEmail, newPasswordHash) => {
   console.log(userId + " " + newEmail + " " + newPasswordHash);
   try {
     const response = await fetch(
-      `${BASE_URL}/UpdateUsername/${userId}?newPasswordHash=${newPasswordHash}&newUsername=${newUsername}`,
+      `${BASE_URL}/UpdateUserEmail/${userId}?newPasswordHash=${newPasswordHash}&newEmail=${newEmail}`,
       {
         method: "PUT",
         headers: {
@@ -129,7 +129,7 @@ export const updateEmail = async (userId, newEmail, newPasswordHash) => {
         body: JSON.stringify({
           UserId: userId,
           PasswordHash: newPasswordHash,
-          Username: newUsername,
+          newEmail: newEmail,
         }),
       }
     );
@@ -146,5 +146,59 @@ export const updateEmail = async (userId, newEmail, newPasswordHash) => {
     }
   } catch (error) {
     return { success: false, message: error.toString() };
+  }
+};
+
+export const updatePassword = async (
+  userId,
+  oldPasswordHash,
+  newPasswordHash
+) => {
+  console.log(userId + " " + oldPasswordHash + " " + newPasswordHash);
+  try {
+    const response = await fetch(
+      `${BASE_URL}/UpdateUserPassword/${userId}?oldPasswordHash=${oldPasswordHash}&newPasswordHash=${newPasswordHash}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          UserId: userId,
+          oldPasswordHash: oldPasswordHash,
+          newPasswordHash: newPasswordHash,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const message = await response.text();
+      return { success: true, message };
+    } else {
+      const errorData = await response.text();
+      return {
+        success: false,
+        message: errorData || "Failed to update the username",
+      };
+    }
+  } catch (error) {
+    return { success: false, message: error.toString() };
+  }
+};
+
+export const deleteUser = async (userId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/DeleteUser/${userId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete the user: " + response.statusText);
+    }
+
+    return await response.text();
+  } catch (error) {
+    console.error("Error during user deletion:", error);
+    throw error;
   }
 };

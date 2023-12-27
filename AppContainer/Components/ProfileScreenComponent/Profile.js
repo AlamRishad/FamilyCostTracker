@@ -15,6 +15,8 @@ import ProfileImage from "../../../assets/splash.png";
 import { useRoute } from "@react-navigation/native";
 import { useFocusEffect } from "@react-navigation/native";
 import { fetchUserDetails } from "../../API/getAllUser";
+import { deleteUser } from "../../API/login";
+import { Alert } from "react-native";
 const Profile = () => {
   const [budgetDetails, setBudgetDetails] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -94,6 +96,33 @@ const Profile = () => {
   };
   const handleSecurityPress = async () => {
     navigation.navigate("SecurityScreen");
+  };
+  const handleRemoveAccountPress = () => {
+    Alert.alert(
+      "Confirm Account Removal",
+      "Are you sure you want to remove your account permanently?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              const response = await deleteUser(userId);
+              navigation.navigate("LoginScreen");
+              alert(response); // Or any other notification method
+            } catch (error) {
+              console.error("Failed to delete account:", error);
+              alert("Failed to delete account: " + error.message);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
   return (
     <ScrollView>
@@ -191,16 +220,31 @@ const Profile = () => {
         <View style={styles.generalSection}>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("LoginScreen");
+              Alert.alert(
+                "Confirm Logout",
+                "Are you sure you want to log out?",
+                [
+                  {
+                    text: "Cancel",
+                    onPress: () => console.log("Logout cancelled"),
+                    style: "cancel",
+                  },
+                  {
+                    text: "Logout",
+                    onPress: () => {
+                      navigation.navigate("LoginScreen");
+                    },
+                  },
+                ],
+                { cancelable: false }
+              );
             }}
             style={styles.generalView2}
           >
             <Text style={styles.generalText3}>Logout</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => {
-              /* handle security */
-            }}
+            onPress={handleRemoveAccountPress}
             style={styles.generalView3}
           >
             <Text style={styles.generalText3}>Remove Account</Text>

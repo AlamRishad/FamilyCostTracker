@@ -64,7 +64,7 @@ const ReportDetails = ({ route }) => {
           renderItem={renderItem}
           keyExtractor={(item) => item.expenseID.toString()}
           ListEmptyComponent={
-            <Text style={styles.emptyList}>No expenses found.</Text>
+            <Text style={styles.emptyList}>No Transection found.</Text>
           }
           refreshControl={
             <RefreshControl refreshing={isLoading} onRefresh={loadExpenses} />

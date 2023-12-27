@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, View, Text } from "react-native";
 import TopBar from "../../Components/CommonComponent/TopBar.js";
 import AllAddMember from "../../Components/HomePage/AddMember.js";
-import ForgotPassword from "../../Components/ForgotPasswordScreen/ForgotPassword.js";
+import EditEmail from "../../Components/EditEmailScreenComponent/EditEmailScreenComponent.js";
 
 import { globalStyle } from "../../utils/globalStyle.js";
 
@@ -13,7 +13,7 @@ export default function Index() {
   return (
     <SafeAreaView style={[globalStyle.container, styles.container]}>
       <View>
-        <ForgotPassword></ForgotPassword>
+        <EditEmail></EditEmail>
       </View>
     </SafeAreaView>
   );

@@ -10,11 +10,14 @@ import {
   Keyboard,
   Image,
 } from "react-native";
-
+import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import LogoImage from "../../../assets/splash.png";
-import { forgotPassword } from "../../API/login";
-const ForgotPassword = () => {
+import { updateEmail } from "../../API/login";
+const EditUserEmail = () => {
+  const route = useRoute();
+  const userId = route.params?.userId;
+  console.log(userId);
   const [keyboardStatus, setKeyboardStatus] = useState(false);
   const scrollViewRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -23,36 +26,27 @@ const ForgotPassword = () => {
   const [passwordY, setPasswordY] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userName, setUserName] = useState("");
-
-  const [password2, setPassword2] = useState("");
+  const emailRegex = /\S+@\S+\.\S+/;
   const navigation = useNavigation();
-  //   const handleForgotPress = async () => {
-  //     navigation.navigate("ForgotPasswordScreen");
-  //   };
-  const handleLoginPress = async () => {
-    navigation.navigate("LoginScreen");
-  };
-  const handleForgotPasswordPress = async () => {
-    if (password.length < 8) {
-      setErrorMessage("The password must be at least 8 characters long.");
-      return;
-    }
-    if (password !== password2) {
-      setErrorMessage("The passwords do not match.");
-      return;
-    }
 
-    // Clear previous error messages
+  const handleForgotPasswordPress = async () => {
     setErrorMessage("");
 
-    const result = await forgotPassword(userName, email, password);
+    const result = await updateEmail(userId, email, password);
+    if (!emailRegex.test(email.trim())) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
 
+    if (!password) {
+      setErrorMessage("Password is required.");
+      return;
+    }
     if (result.success) {
-      setErrorMessage("Password changed successfully");
-      setTimeout(() => navigation.navigate("LoginScreen"), 1500);
+      //   setErrorMessage("UserName changed successfully");
+      setTimeout(() => navigation.navigate("Profile", { userId: userId }), 100);
     } else {
-      setErrorMessage(result.message);
+      setErrorMessage("This user email already exist");
     }
   };
   const passwordInputRef = useRef(null);
@@ -113,16 +107,10 @@ const ForgotPassword = () => {
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.title}>Change Password</Text>
+        <Text style={styles.title}>Change Email</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your UserName"
-          onChangeText={setUserName}
-          value={userName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your email"
+          placeholder="Enter your new email"
           onChangeText={setEmail}
           value={email}
         />
@@ -134,7 +122,7 @@ const ForgotPassword = () => {
             setPasswordY(layout.y);
           }}
           style={styles.input}
-          placeholder="Enter your new password "
+          placeholder="Enter your password "
           onChangeText={setPassword}
           value={password}
           secureTextEntry={true}
@@ -147,26 +135,7 @@ const ForgotPassword = () => {
           }}
           // secureTextEntry={true}
         />
-        <TextInput
-          onLayout={(event) => {
-            const layout = event.nativeEvent.layout;
-            setPasswordX(layout.x);
-            setPasswordY(layout.y);
-          }}
-          style={styles.input}
-          placeholder="Enter your confirm password "
-          onChangeText={setPassword2}
-          value={password2}
-          secureTextEntry={true}
-          onFocus={() => {
-            scrollViewRef.current.scrollTo({
-              x: passwordX,
-              y: passwordY,
-              animated: true,
-            });
-          }}
-          // secureTextEntry={true}
-        />
+
         {errorMessage !== "" && (
           <Text style={styles.errorMessage}>{errorMessage}</Text>
         )}
@@ -265,4 +234,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPassword;
+export default EditUserEmail;

@@ -486,6 +486,9 @@ const ShowAllBudgetDetails = ({ route }) => {
           data={budgetDetails}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
+          ListEmptyComponent={
+            <Text style={styles.emptyList}>No Expense Details found.</Text>
+          }
           refreshControl={
             <RefreshControl
               refreshing={isLoading}

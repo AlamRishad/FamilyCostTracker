@@ -13,8 +13,8 @@ import {
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
 import LogoImage from "../../../assets/splash.png";
-import { updateEmail } from "../../API/login";
-const EditUserEmail = () => {
+import { updatePassword } from "../../API/login";
+const EditPassword = () => {
   const route = useRoute();
   const userId = route.params?.userId;
   console.log(userId);
@@ -24,24 +24,38 @@ const EditUserEmail = () => {
 
   const [passwordX, setPasswordX] = useState(0);
   const [passwordY, setPasswordY] = useState(0);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [userName, setUserName] = useState("");
-  const emailRegex = /\S+@\S+\.\S+/;
+  const [oldpassword, setOldPassword] = useState("");
+
+  const [newpassword, setNewPassword] = useState("");
+
+  const [confirmpassword, setConfirmPassword] = useState("");
+
   const navigation = useNavigation();
+
   const handleForgotPasswordPress = async () => {
     setErrorMessage("");
 
-    const result = await updateEmail(userId, email, password);
-    if (!emailRegex.test(email.trim())) {
-      setErrorMessage("Please enter a valid email address.");
-      return;
-    }
-
-    if (!password) {
+    if (!oldpassword) {
       setErrorMessage("Password is required.");
       return;
     }
+    if (!newpassword) {
+      setErrorMessage("Password is required.");
+      return;
+    }
+    if (!confirmpassword) {
+      setErrorMessage("Password is required.");
+      return;
+    }
+    if (newpassword.length < 8) {
+      setErrorMessage("The password must be at least 8 characters long.");
+      return;
+    }
+    if (newpassword !== confirmpassword) {
+      setErrorMessage("The passwords do not match.");
+      return;
+    }
+    const result = await updatePassword(userId, oldpassword, newpassword);
     if (result.success) {
       //   setErrorMessage("UserName changed successfully");
       setTimeout(() => navigation.navigate("Profile", { userId: userId }), 100);
@@ -107,13 +121,7 @@ const EditUserEmail = () => {
             resizeMode="contain"
           />
         </View>
-        <Text style={styles.title}>Change Email</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter your new email"
-          onChangeText={setEmail}
-          value={userName}
-        />
+        <Text style={styles.title}>Change Password</Text>
 
         <TextInput
           onLayout={(event) => {
@@ -123,8 +131,8 @@ const EditUserEmail = () => {
           }}
           style={styles.input}
           placeholder="Enter your password "
-          onChangeText={setPassword}
-          value={password}
+          onChangeText={setOldPassword}
+          value={oldpassword}
           secureTextEntry={true}
           onFocus={() => {
             scrollViewRef.current.scrollTo({
@@ -135,7 +143,46 @@ const EditUserEmail = () => {
           }}
           // secureTextEntry={true}
         />
-
+        <TextInput
+          onLayout={(event) => {
+            const layout = event.nativeEvent.layout;
+            setPasswordX(layout.x);
+            setPasswordY(layout.y);
+          }}
+          style={styles.input}
+          placeholder="Enter your new password "
+          onChangeText={setNewPassword}
+          value={newpassword}
+          secureTextEntry={true}
+          onFocus={() => {
+            scrollViewRef.current.scrollTo({
+              x: passwordX,
+              y: passwordY,
+              animated: true,
+            });
+          }}
+          // secureTextEntry={true}
+        />
+        <TextInput
+          onLayout={(event) => {
+            const layout = event.nativeEvent.layout;
+            setPasswordX(layout.x);
+            setPasswordY(layout.y);
+          }}
+          style={styles.input}
+          placeholder="Enter your confirm password "
+          onChangeText={setConfirmPassword}
+          value={confirmpassword}
+          secureTextEntry={true}
+          onFocus={() => {
+            scrollViewRef.current.scrollTo({
+              x: passwordX,
+              y: passwordY,
+              animated: true,
+            });
+          }}
+          // secureTextEntry={true}
+        />
         {errorMessage !== "" && (
           <Text style={styles.errorMessage}>{errorMessage}</Text>
         )}
@@ -234,4 +281,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditUserEmail;
+export default EditPassword;

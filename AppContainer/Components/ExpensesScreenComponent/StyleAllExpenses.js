@@ -205,4 +205,10 @@ export const styles = StyleSheet.create({
     color: "white",
     fontSize: 14,
   },
+  emptyList: {
+    fontSize: 18,
+    textAlign: "center",
+    marginTop: 20,
+    color: "#999", // change as per your theme
+  },
 });
