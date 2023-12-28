@@ -14,13 +14,11 @@ export const login = async (email, password) => {
       }),
     });
 
-    const responseBody = await response.json(); // Now this should work as expected
+    const responseBody = await response.json();
     if (response.ok) {
-      // Extract userId from the JSON response
       const userId = responseBody.userId;
       return { success: true, body: responseBody, userId: userId };
     } else {
-      // Error messages are also sent as JSON now
       return { success: false, message: responseBody.message };
     }
   } catch (error) {

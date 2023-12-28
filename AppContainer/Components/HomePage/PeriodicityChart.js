@@ -28,13 +28,24 @@ const PeriodicityDetails = ({ route }) => {
           } else if (selectedPeriodicity === "Weekly") {
             processedData = processWeeklyExpenses(fetchedData);
           } else {
-            // Assume 'Daily' or default handling
             fetchedData.sort((a, b) => new Date(a.date) - new Date(b.date));
             const labels = fetchedData.map((item) =>
               new Date(item.date).getDate().toString()
             );
             const expenses = fetchedData.map((item) => item.dailyExpense);
-            processedData = { labels, data: expenses };
+
+            const expenseDifferences = expenses.map((current, index, array) => {
+              if (index === 0) return current;
+              return current - array[index - 1];
+            });
+
+            processedData = {
+              labels,
+              data: expenseDifferences,
+              // dailyDifferences: ,
+            };
+
+            console.log(processedData);
           }
           setChartData(processedData);
         } catch (error) {

@@ -41,13 +41,11 @@ const Dropdown = ({ options, onSelect, route }) => {
   const addFamilyMember = () => {
     setErrorMessage("");
 
-    // Validation for fullName
     if (!fullName || fullName.trim() === "") {
       setErrorMessage("Please enter the full name.");
       return;
     }
 
-    // Validation for selectedOption
     if (!selectedOption) {
       setErrorMessage("Please select a relationship option.");
       return;
