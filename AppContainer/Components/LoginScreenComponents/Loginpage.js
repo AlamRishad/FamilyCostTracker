@@ -11,6 +11,7 @@ import {
   Image,
 } from "react-native";
 
+import { CheckBox } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import LogoImage from "../../../assets/splash.png";
 import { login } from "../../API/login";
@@ -22,7 +23,8 @@ const Loginpage = () => {
   const [passwordY, setPasswordY] = useState(0);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [userType, setUserType] = useState("primary");
+  const [username, setUsername] = useState("");
   const navigation = useNavigation();
   const handleForgotPress = async () => {
     navigation.navigate("ForgotPasswordScreen");
@@ -94,7 +96,7 @@ const Loginpage = () => {
       <ScrollView
         contentContainerStyle={[
           styles.container,
-          { minHeight: windowHeight * (keyboardStatus ? 1.3 : 1) },
+          { minHeight: windowHeight * (keyboardStatus ? 1.5 : 1) },
         ]}
         ref={scrollViewRef}
       >
@@ -107,32 +109,63 @@ const Loginpage = () => {
           />
         </View>
         <Text style={styles.title}>Login</Text>
+        <View style={styles.maincheckboxContainer}>
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              title="Primary user"
+              checked={userType === "primary"}
+              onPress={() => setUserType("primary")}
+              containerStyle={styles.checkbox}
+              textStyle={styles.label}
+            />
+          </View>
+
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              title="Secondary user"
+              checked={userType === "secondary"}
+              onPress={() => setUserType("secondary")}
+              containerStyle={styles.checkbox}
+              textStyle={styles.label}
+            />
+          </View>
+        </View>
         <TextInput
           style={styles.input}
           placeholder="Enter your email"
           onChangeText={setEmail}
           value={email}
         />
-        <TextInput
-          onLayout={(event) => {
-            const layout = event.nativeEvent.layout;
-            setPasswordX(layout.x);
-            setPasswordY(layout.y);
-          }}
-          style={styles.input}
-          placeholder="Enter your password "
-          onChangeText={setPassword}
-          value={password}
-          secureTextEntry={true}
-          onFocus={() => {
-            scrollViewRef.current.scrollTo({
-              x: passwordX,
-              y: passwordY,
-              animated: true,
-            });
-          }}
-          // secureTextEntry={true}
-        />
+
+        {userType === "primary" ? (
+          <TextInput
+            onLayout={(event) => {
+              const layout = event.nativeEvent.layout;
+              setPasswordX(layout.x);
+              setPasswordY(layout.y);
+            }}
+            style={styles.input}
+            placeholder="Enter your password "
+            onChangeText={setPassword}
+            value={password}
+            secureTextEntry={true}
+            onFocus={() => {
+              scrollViewRef.current.scrollTo({
+                x: passwordX,
+                y: passwordY,
+                animated: true,
+              });
+            }}
+            // secureTextEntry={true}
+          />
+        ) : (
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your username"
+            onChangeText={setUsername}
+            value={username}
+          />
+        )}
         {errorMessage ? (
           <Text style={styles.errorMessage}>{errorMessage}</Text>
         ) : null}
@@ -141,17 +174,22 @@ const Loginpage = () => {
             <Text style={styles.buttonText}>Login</Text>
           </View>
         </TouchableOpacity>
-
-        <TouchableOpacity onPress={handleForgotPress}>
-          <View style={styles.forgotButton}>
-            <Text style={styles.buttonText2}>Forgot Password?</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleRegister}>
-          <View style={styles.forgotPassBtn}>
-            <Text style={styles.forgotButtonText}>Register</Text>
-          </View>
-        </TouchableOpacity>
+        <>
+          {userType === "primary" ? (
+            <>
+              <TouchableOpacity onPress={handleForgotPress}>
+                <View style={styles.forgotButton}>
+                  <Text style={styles.buttonText2}>Forgot Password?</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleRegister}>
+                <View style={styles.forgotPassBtn}>
+                  <Text style={styles.forgotButtonText}>Register</Text>
+                </View>
+              </TouchableOpacity>
+            </>
+          ) : null}
+        </>
       </ScrollView>
     </>
   );
@@ -166,8 +204,30 @@ const styles = StyleSheet.create({
     paddingTop: windowHeight * 0.1,
     backgroundColor: "white",
   },
+  maincheckboxContainer: {
+    flexDirection: "row",
+    width: windowWidth * 0.9,
+  },
+  checkboxContainer: {
+    width: windowWidth * 0.45,
+    paddingBottom: 10,
+    padding: 2,
+  },
+  checkbox: {
+    borderWidth: 1,
+    borderColor: "#205578",
+    backgroundColor: "#EFF3FB",
+    borderRadius: 10,
+    padding: 5,
+    paddingTop: 10,
+
+    paddingBottom: 10,
+  },
+  label: {
+    fontSize: 12,
+  },
   icons: {
-    marginBottom: windowHeight * 0.038,
+    // marginBottom: windowHeight * 0.01,
   },
   imageStyle: {
     width: windowWidth * 0.9,
@@ -178,7 +238,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    marginTop: 20,
+    // marginTop: -8,
     marginBottom: windowHeight * 0.025,
     //fontFamily: "HindSiliguri-Regular",
   },
