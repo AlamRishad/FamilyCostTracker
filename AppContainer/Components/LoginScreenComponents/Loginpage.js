@@ -36,16 +36,21 @@ const Loginpage = () => {
   };
 
   const handleLoginPress = async () => {
-    const result = await login(email, password);
-    if (result.success) {
-      console.log("Response Body:", result.body);
-      const userId = result.body.userId;
-      console.log(userId + "login page");
-      navigation.navigate("MainApp", { userId: userId });
-      setEmail("");
-      setPassword("");
+    console.log(userType);
+    if (userType == "secondary") {
+      navigation.navigate("SecondaryMainApp");
     } else {
-      setErrorMessage(result.message);
+      const result = await login(email, password);
+      if (result.success) {
+        console.log("Response Body:", result.body);
+        const userId = result.body.userId;
+        console.log(userId + "login page");
+        navigation.navigate("MainApp", { userId: userId });
+        setEmail("");
+        setPassword("");
+      } else {
+        setErrorMessage(result.message);
+      }
     }
   };
 

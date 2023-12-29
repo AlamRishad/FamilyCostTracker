@@ -17,6 +17,8 @@ import ReportScreen from "../../Screens/ReportScreen";
 import EditUserNameScreen from "../../Screens/EditUserNameScreen";
 import EditPasswordScreen from "../../Screens/EditPasswordScreen";
 import EditEmailScreen from "../../Screens/EditEmailScreen";
+import SecondaryBottomTabNavigator from "./SecondaryBottomTabNavigator";
+import SecondaryProfile from "../../Screens/SecondaryScreen/SecondaryProfileScreen";
 const Stack = createNativeStackNavigator();
 export default function AppStackNavigator() {
   return (
@@ -31,7 +33,12 @@ export default function AppStackNavigator() {
     >
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="MainApp" component={BottomTabNavigator} />
+      <Stack.Screen
+        name="SecondaryMainApp"
+        component={SecondaryBottomTabNavigator}
+      />
       <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="SecondaryProfile" component={SecondaryProfile} />
 
       <Stack.Screen
         name="ForgotPasswordScreen"
@@ -40,24 +47,17 @@ export default function AppStackNavigator() {
       <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
       <Stack.Screen name="AddMemberScreen" component={AddMemberScreen} />
       <Stack.Screen name="PrivacyScreen" component={PrivacyScreen} />
-
       <Stack.Screen name="HelpScreen" component={HelpScreen} />
-
       <Stack.Screen name="SecurityScreen" component={SecurityScreen} />
-
       <Stack.Screen
         name="MemberDetailsScreen"
         component={MemberDetailsScreen}
       />
       <Stack.Screen name="ExpensesScreen" component={ExpensesScreen} />
-
       <Stack.Screen name="BudgetScreen" component={BudgetScreen} />
-
       <Stack.Screen name="ReportScreen" component={ReportScreen} />
       <Stack.Screen name="EditUserNameScreen" component={EditUserNameScreen} />
-
       <Stack.Screen name="EditPasswordScreen" component={EditPasswordScreen} />
-
       <Stack.Screen name="EditEmailScreen" component={EditEmailScreen} />
     </Stack.Navigator>
   );
