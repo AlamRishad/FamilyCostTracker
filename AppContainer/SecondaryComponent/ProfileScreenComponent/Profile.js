@@ -16,48 +16,49 @@ import { useRoute } from "@react-navigation/native";
 import { useFocusEffect } from "@react-navigation/native";
 // import { fetchUserDetails } from "../../API/getAllUser";
 import { Alert } from "react-native";
-const Profile = () => {
+const Profile = ({ route }) => {
+  const { userId, familyMemberId, username } = route.params;
   const [budgetDetails, setBudgetDetails] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
 
-  const [expenseDetails, setExpenseDetails] = useState([]);
   const [totalExpenseAmount, setTotalExpenseAmount] = useState(0);
 
-  const [userName, setUserName] = useState("");
+  const [expenseDetails, setExpenseDetails] = useState([]);
+
   //   const route = useRoute();
   //   const userId = route.params?.userId;
   //   console.log(userId);
-  //   useFocusEffect(
-  //     React.useCallback(() => {
-  //       fetchAllBudgetDetails(userId)
-  //         .then((data) => {
-  //           // console.log(data);
-  //           setBudgetDetails(data);
-  //           calculateTotalAmount(data);
-  //         })
-  //         .catch((error) =>
-  //           console.error("Error fetching budget details:", error)
-  //         );
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchAllBudgetDetails(userId)
+        .then((data) => {
+          // console.log(data);
+          setBudgetDetails(data);
+          calculateTotalAmount(data);
+        })
+        .catch((error) =>
+          console.error("Error fetching budget details:", error)
+        );
 
-  //       return () => {};
-  //     }, [userId])
-  //   );
+      return () => {};
+    }, [userId])
+  );
 
-  //   useFocusEffect(
-  //     React.useCallback(() => {
-  //       fetchTransectionExpenses(userId)
-  //         .then((data) => {
-  //           //console.log(data);
-  //           setExpenseDetails(data);
-  //           calculateTotalAmount2(data);
-  //         })
-  //         .catch((error) =>
-  //           console.error("Error fetching expense details:", error)
-  //         );
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchTransectionExpenses(userId)
+        .then((data) => {
+          //console.log(data);
+          setExpenseDetails(data);
+          calculateTotalAmount2(data);
+        })
+        .catch((error) =>
+          console.error("Error fetching expense details:", error)
+        );
 
-  //       return () => {};
-  //     }, [userId])
-  //   );
+      return () => {};
+    }, [userId])
+  );
   //   useFocusEffect(
   //     React.useCallback(() => {
   //       fetchUserDetails(userId)
@@ -71,20 +72,29 @@ const Profile = () => {
   //     }, [userId])
   //   );
 
-  //   const calculateTotalAmount = (data) => {
-  //     const total = data.reduce(
-  //       (acc, item) => acc + parseFloat(item.amount || 0),
-  //       0
-  //     );
-  //     setTotalAmount(total);
-  //   };
-  //   const calculateTotalAmount2 = (data) => {
-  //     const total = data.reduce(
-  //       (acc, item) => acc + parseFloat(item.differenceFromPreviousRow || 0),
-  //       0
-  //     );
-  //     setTotalExpenseAmount(total);
-  //   };
+  const calculateTotalAmount = (data) => {
+    const total = data.reduce((acc, item) => {
+      if (item.familyMemberID === familyMemberId) {
+        // console.log(`FamilyID1: ${item.familyMemberID} + ${familyMemberId}`);
+        return acc + parseFloat(item.amount || 0);
+      }
+      return acc;
+    }, 0);
+    setTotalAmount(total);
+  };
+
+  const calculateTotalAmount2 = (data) => {
+    //  console.log(data);
+    const total = data.reduce((acc, item) => {
+      if (item.familyMemberName === username) {
+        //  console.log(`Expense: ${item.familyMemberID} + ${familyMemberId}`);
+        return acc + parseFloat(item.differenceFromPreviousRow || 0);
+      }
+      return acc;
+    }, 0);
+
+    setTotalExpenseAmount(total);
+  };
 
   const navigation = useNavigation();
   const handlePrivacyPress = async () => {
@@ -107,21 +117,20 @@ const Profile = () => {
         <View style={styles.profileSection}>
           <Image source={ProfileImage} style={styles.profilePic} />
           {/* <Text style={styles.name}>{userName}</Text> */}
-          <Text style={styles.name}>Rishad</Text>
+          <Text style={styles.name}>{username}</Text>
           <View style={styles.financeContainer}>
             <View style={styles.incomeContainer}>
               <Text style={styles.moneyText}>Budget</Text>
-              {/* <Text style={styles.amount}>৳{totalAmount.toFixed(2)}</Text> */}
-              <Text style={styles.amount}>৳500</Text>
+              <Text style={styles.amount}>৳{totalAmount.toFixed(2)}</Text>
             </View>
 
             <View style={styles.divider} />
             <View style={styles.expenseContainer}>
               <Text style={styles.moneyText}>Expense</Text>
-              {/* <Text style={styles.amount}>
+              <Text style={styles.amount}>
                 ৳{totalExpenseAmount.toFixed(2)}
-              </Text> */}
-              <Text style={styles.amount}>৳100</Text>
+              </Text>
+              {/* <Text style={styles.amount}>৳100</Text> */}
             </View>
           </View>
         </View>

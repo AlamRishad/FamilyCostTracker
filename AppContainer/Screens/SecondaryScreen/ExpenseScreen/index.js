@@ -2,22 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, SafeAreaView, StyleSheet, View, Text } from "react-native";
 import { globalStyle } from "../../../utils/globalStyle.js";
 import TopBar from "../../../SecondaryComponent/CommonComponent/TopBar.js";
+import ShowAllExpense from "../../../SecondaryComponent/ExpensesScreenComponent/AllExpensesCategory.js";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
 export default function Index({ route }) {
+  const { userId, familyMemberId } = route.params;
   // const userId = route.params.userId;
-  //   const userId = route.params.userId;
-  //   console.log(userId);
-  //   console.log(userId + "homescreen" + route);
+  console.log(userId);
+  console.log(userId + "expensescreen" + familyMemberId);
   return (
     <SafeAreaView style={[globalStyle.container, styles.container]}>
       <View>
-        <TopBar></TopBar>
-        {/* <TopBar route={route}></TopBar>
+        <TopBar route={route}></TopBar>
 
-        <ShowAllExpense route={route}></ShowAllExpense> */}
+        <ShowAllExpense route={route}></ShowAllExpense>
       </View>
     </SafeAreaView>
   );

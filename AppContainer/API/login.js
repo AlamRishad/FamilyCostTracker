@@ -29,6 +29,40 @@ export const login = async (email, password) => {
     };
   }
 };
+export const secondaryLogin = async (email, username) => {
+  console.log(email, username);
+  try {
+    const response = await fetch(
+      `${API_URL}/SecondaryLogin?userEmail=${email}&familyMemberName=${username}`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json", // Expecting JSON in response
+        },
+      }
+    );
+
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      const responseBody = await response.json();
+      if (response.ok) {
+        return { success: true, body: responseBody };
+      } else {
+        return { success: false, message: responseBody.message };
+      }
+    } else {
+      const textResponse = await response.text();
+      return { success: false, message: textResponse || "No content" };
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    return {
+      success: false,
+      message: "An error occurred. Please try again later.",
+    };
+  }
+};
+
 export const registerUser = async (userData) => {
   try {
     console.log(userData);

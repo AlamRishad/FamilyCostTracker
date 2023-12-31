@@ -13,7 +13,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { fetchTransectionExpenses } from "../../API/TransectionGetDetails";
 const { width, height } = Dimensions.get("window");
 const ReportDetails = ({ route }) => {
-  const { userId } = route.params;
+  const { userId, familyMemberId, username } = route.params;
   const [isLoading, setIsLoading] = useState(true);
   const [expenseData, setExpenseData] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null);
@@ -35,30 +35,35 @@ const ReportDetails = ({ route }) => {
       loadExpenses();
     }, [userId])
   );
-  const a = 0;
-  const renderItem = ({ item, index }) => (
-    <TouchableOpacity
-      style={[
-        styles.categoryItem,
-        selectedIndex === index && styles.selectedItem, // Add this line
-      ]}
-      onPress={() => setSelectedIndex(index)} // Set the selected index
-    >
-      <Text style={styles.detailText}>{item.expenseID}</Text>
-      <Text style={styles.detailText}>{item.categoryName}</Text>
-      <Text style={styles.detailText}>{item.familyMemberName}</Text>
-      <Text style={styles.detailText}>{item.differenceFromPreviousRow}</Text>
-    </TouchableOpacity>
-  );
+  const renderItem = ({ item, index }) => {
+    if (item.familyMemberName === username) {
+      return (
+        <TouchableOpacity
+          style={[
+            styles.categoryItem,
+            selectedIndex === index && styles.selectedItem,
+          ]}
+          onPress={() => setSelectedIndex(index)}
+        >
+          <Text style={styles.detailText}>{item.expenseID}</Text>
+          <Text style={styles.detailText}>{item.categoryName}</Text>
+          <Text style={styles.detailText}>
+            {item.differenceFromPreviousRow}
+          </Text>
+        </TouchableOpacity>
+      );
+    }
 
+    return null;
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Transection Details</Text>
       <View style={styles.itemHeader}>
-        <Text style={styles.itemHeaderText}>T.ID</Text>
-        <Text style={styles.itemHeaderText}>C.Name</Text>
-        <Text style={styles.itemHeaderText}>F.Name</Text>
-        <Text style={styles.itemHeaderText}>T.Amount</Text>
+        <Text style={styles.itemHeaderText}>Transection ID</Text>
+        <Text style={styles.itemHeaderText}>Category Name</Text>
+        {/* <Text style={styles.itemHeaderText}>F.Name</Text> */}
+        <Text style={styles.itemHeaderText}>Amount</Text>
       </View>
       {isLoading ? (
         <ActivityIndicator
@@ -99,37 +104,37 @@ const styles = StyleSheet.create({
   itemHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 8, // Space below the header
-    paddingHorizontal: "2%", // Proportional padding
-    paddingVertical: 8, // Consistent vertical padding
-    backgroundColor: "#EFF3FB", // Use a color that contrasts lightly with white
+    marginBottom: 8,
+    paddingHorizontal: "2%",
+    paddingVertical: 8,
+    backgroundColor: "#EFF3FB",
   },
   itemHeaderText: {
     fontWeight: "bold",
-    fontSize: 16, // Increased font size for better readability
-    color: "#333", // Use your theme color here
-    flex: 1, // Flex applied for equal spacing
+    fontSize: 16,
+    color: "#333",
+    flex: 1,
     textAlign: "center",
   },
   itemContainer: {
     backgroundColor: "#ffffff",
     borderRadius: 8,
-    marginBottom: 8, // Consistent margin for separation
-    elevation: 1, // Elevation applied for a subtle shadow
+    marginBottom: 8,
+    elevation: 1,
   },
   categoryItem: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 12, // Increased padding for touch targets
+    paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
-    paddingHorizontal: "2%", // Proportional padding
+    paddingHorizontal: "2%",
   },
   detailText: {
-    fontSize: 16, // Increased for better readability
+    fontSize: 16,
     textAlign: "center",
-    flex: 1, // Flex applied for equal spacing
-    color: "#666", // Use your theme color here
+    flex: 1,
+    color: "#666",
   },
   loading: {
     flex: 1,
@@ -140,11 +145,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     textAlign: "center",
-    color: "#999", // Use your theme color here
-    paddingTop: "50%", // Centers the empty text vertically in the container
+    color: "#999",
+    paddingTop: "50%",
   },
   selectedItem: {
-    backgroundColor: "#E8E8E8", // or any color you want for the selected row
+    backgroundColor: "#E8E8E8",
   },
 });
 

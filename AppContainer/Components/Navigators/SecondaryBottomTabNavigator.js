@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import React from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { Dimensions, Text, View, StyleSheet } from "react-native";
 import HomeScreen from "../../Screens/SecondaryScreen/HomeScreen";
 import { CardStyleInterpolators } from "@react-navigation/stack";
@@ -14,14 +14,18 @@ import SettingsIconDis from "../../../assets/BottomNavBar/settingsIconDis";
 import ReportScreen from "../../Screens/SecondaryScreen/TransectionScreen";
 import ExpensesScreen from "../../Screens/SecondaryScreen/ExpenseScreen";
 
+import { useFocusEffect } from "@react-navigation/native";
+
+import { fetchFamilyMemberDetails } from "../../API/CreateMember";
 import BudgetScreen from "../../Screens/BudgetScreen";
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = ({ route, navigation }) => {
-  // const { userId } = route.params;
-  // console.log(userId + "bottomnavbar");
+  const { userId, username, familyMemberId } = route.params;
+  console.log(userId + "bottomnavbar" + username);
+  console.log("FamilyMemberId on Bottom:", familyMemberId);
   return (
     <Tab.Navigator
       initialRouteName="home"
@@ -36,7 +40,11 @@ const BottomTabNavigator = ({ route, navigation }) => {
       <Tab.Screen
         name="home"
         component={HomeScreen}
-        // initialParams={{ userId: userId }}
+        initialParams={{
+          userId: userId,
+          username: username,
+          familyMemberId: familyMemberId,
+        }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
@@ -58,7 +66,11 @@ const BottomTabNavigator = ({ route, navigation }) => {
       <Tab.Screen
         name="newProblem"
         component={ExpensesScreen}
-        // initialParams={{ userId: userId }}
+        initialParams={{
+          userId: userId,
+          username: username,
+          familyMemberId: familyMemberId,
+        }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text
@@ -80,7 +92,11 @@ const BottomTabNavigator = ({ route, navigation }) => {
       <Tab.Screen
         name="newProblem2"
         component={ReportScreen}
-        // initialParams={{ userId: userId }}
+        initialParams={{
+          userId: userId,
+          username: username,
+          familyMemberId: familyMemberId,
+        }}
         options={{
           tabBarLabel: ({ focused }) => (
             <Text

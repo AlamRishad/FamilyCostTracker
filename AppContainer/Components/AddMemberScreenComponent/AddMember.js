@@ -12,6 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { createFamilyMember } from "../../API/CreateMember";
 
+import { CheckBox } from "react-native-elements";
 const Dropdown = ({ options, onSelect, route }) => {
   const userId = route;
   console.log(route + "dropdown" + userId);
@@ -20,6 +21,7 @@ const Dropdown = ({ options, onSelect, route }) => {
   const animatedHeight = useRef(new Animated.Value(0)).current;
   const [fullName, setFullName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [userType, setUserType] = useState("primary");
 
   const toggleDropdown = () => {
     Animated.timing(animatedHeight, {
@@ -52,13 +54,26 @@ const Dropdown = ({ options, onSelect, route }) => {
     }
     console.log("Submitting form...");
 
-    createFamilyMember(fullName, selectedOption, userId)
+    createFamilyMember(fullName, selectedOption, userId, userType)
       .then((responseText) => {
         console.log("Family member created:", responseText);
         navigation.goBack();
       })
       .catch((error) => {
-        console.error("Failed to create family member:", error);
+        if (
+          error ==
+          "Error: A family member with the same name already exists for this user."
+        ) {
+          setErrorMessage("This family member already exist.");
+        } else {
+          if (
+            error == "SyntaxError: JSON Parse error: Unexpected character: F"
+          ) {
+            navigation.goBack();
+          } else {
+            console.error("Failed to create family member:", error);
+          }
+        }
       });
   };
 
@@ -93,6 +108,28 @@ const Dropdown = ({ options, onSelect, route }) => {
           </ScrollView>
         </Animated.View>
       )}
+
+      <View style={styles.maincheckboxContainer}>
+        <View style={styles.checkboxContainer}>
+          <CheckBox
+            title="Primary user"
+            checked={userType === "primary"}
+            onPress={() => setUserType("primary")}
+            containerStyle={styles.checkbox}
+            textStyle={styles.label}
+          />
+        </View>
+
+        <View style={styles.checkboxContainer}>
+          <CheckBox
+            title="Secondary user"
+            checked={userType === "secondary"}
+            onPress={() => setUserType("secondary")}
+            containerStyle={styles.checkbox}
+            textStyle={styles.label}
+          />
+        </View>
+      </View>
       {errorMessage !== "" && (
         <Text style={styles.errorMessage}>{errorMessage}</Text>
       )}
@@ -212,6 +249,25 @@ const styles = StyleSheet.create({
   },
   optionText: {
     fontSize: 16,
+  },
+  maincheckboxContainer: {
+    flexDirection: "row",
+    width: windowWidth * 0.9,
+  },
+  checkboxContainer: {
+    width: windowWidth * 0.45,
+    paddingBottom: 10,
+    padding: 2,
+  },
+  checkbox: {
+    // borderWidth: 1,
+    // borderColor: "#205578",
+    // backgroundColor: "#EFF3FB",
+    borderRadius: 10,
+    padding: 5,
+    paddingTop: 10,
+
+    paddingBottom: 10,
   },
 });
 

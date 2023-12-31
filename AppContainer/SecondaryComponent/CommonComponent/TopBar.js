@@ -15,9 +15,9 @@ const { width, height } = Dimensions.get("window");
 const imageSize = width * 0.1;
 
 function Topbar({ route }) {
-  //   console.log(route, "top");
-  //   const { userId } = route.params;
-  //   console.log(userId + "top");
+  //console.log(route, "top");
+  const { userId, familyMemberId, username } = route.params;
+  console.log(userId + "top" + familyMemberId + "top" + username);
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
@@ -43,7 +43,11 @@ function Topbar({ route }) {
         activeOpacity={0.5}
         onPress={() => {
           //   navigation.navigate("Profile", { userId: userId });
-          navigation.navigate("SecondaryProfile");
+          navigation.navigate("SecondaryProfile", {
+            userId: userId,
+            username: username,
+            familyMemberId: familyMemberId,
+          });
         }}
       >
         <Image

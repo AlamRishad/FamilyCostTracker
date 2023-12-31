@@ -14,7 +14,7 @@ import {
 import { CheckBox } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
 import LogoImage from "../../../assets/splash.png";
-import { login } from "../../API/login";
+import { login, secondaryLogin } from "../../API/login";
 const Loginpage = () => {
   const [keyboardStatus, setKeyboardStatus] = useState(false);
   const scrollViewRef = useRef(null);
@@ -38,7 +38,27 @@ const Loginpage = () => {
   const handleLoginPress = async () => {
     console.log(userType);
     if (userType == "secondary") {
-      navigation.navigate("SecondaryMainApp");
+      const result = await secondaryLogin(email, username);
+      if (result.success) {
+        console.log("Response Body:", result.body);
+        const userId = result.body.userId;
+        const familyMemberId = result.body.familyMemberId;
+        setEmail("");
+        setPassword("");
+        setUsername("");
+        setErrorMessage("");
+
+        console.log(
+          userId + "Secondary login page" + username + "Id:  " + familyMemberId
+        );
+        navigation.navigate("SecondaryMainApp", {
+          userId: userId,
+          username: username,
+          familyMemberId: familyMemberId,
+        });
+      } else {
+        setErrorMessage(result.message);
+      }
     } else {
       const result = await login(email, password);
       if (result.success) {
@@ -101,7 +121,7 @@ const Loginpage = () => {
       <ScrollView
         contentContainerStyle={[
           styles.container,
-          { minHeight: windowHeight * (keyboardStatus ? 1.5 : 1) },
+          { minHeight: windowHeight * (keyboardStatus ? 1.5 : 1.1) },
         ]}
         ref={scrollViewRef}
       >
@@ -165,10 +185,23 @@ const Loginpage = () => {
           />
         ) : (
           <TextInput
+            onLayout={(event) => {
+              const layout = event.nativeEvent.layout;
+              setPasswordX(layout.x);
+              setPasswordY(layout.y);
+            }}
             style={styles.input}
             placeholder="Enter your username"
             onChangeText={setUsername}
             value={username}
+            //secureTextEntry={true}
+            onFocus={() => {
+              scrollViewRef.current.scrollTo({
+                x: passwordX,
+                y: passwordY + 10,
+                animated: true,
+              });
+            }}
           />
         )}
         {errorMessage ? (

@@ -6,11 +6,11 @@ import { globalStyle } from "../../../utils/globalStyle.js";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function Index() {
+export default function Index({ route }) {
   return (
     <SafeAreaView style={[globalStyle.container, styles.container]}>
       <View>
-        <Profile></Profile>
+        <Profile route={route}></Profile>
       </View>
     </SafeAreaView>
   );
