@@ -36,7 +36,7 @@ const PeriodicityDetails = ({ route }) => {
 
             const expenseDifferences = expenses.map((current, index, array) => {
               if (index === 0) return current;
-              return current - array[index - 1];
+              return current;
             });
 
             processedData = {

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import { fetchDailyExpensesByMember } from "../../API/DailyExpenseApi";
@@ -20,6 +21,7 @@ const PeriodicityDetails = ({ route }) => {
   );
   const [selectedPeriodicity, setSelectedPeriodicity] = useState("Daily");
   const [chartData, setChartData] = useState({ labels: [], data: [] });
+  const [isLoading, setIsLoading] = useState(true);
   useFocusEffect(
     useCallback(() => {
       const fetchExpenses = async () => {
@@ -42,7 +44,7 @@ const PeriodicityDetails = ({ route }) => {
 
             const expenseDifferences = expenses.map((current, index, array) => {
               if (index === 0) return current;
-              return current - array[index - 1];
+              return current;
             });
 
             processedData = {
@@ -54,6 +56,7 @@ const PeriodicityDetails = ({ route }) => {
             console.log(processedData);
           }
           setChartData(processedData);
+          setIsLoading(false);
         } catch (error) {
           console.error("Error fetching data:", error);
         }
@@ -131,31 +134,41 @@ const PeriodicityDetails = ({ route }) => {
           </TouchableOpacity>
         ))}
       </View>
-      {selectedPeriodicity && chartData.data.length > 0 && (
+      {isLoading ? (
+        <ActivityIndicator
+          size="large"
+          color="#0000ff"
+          style={styles.loading}
+        />
+      ) : (
         <>
-          <Text style={styles.monthYearText}>
-            {new Date().toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "long",
-            })}
-          </Text>
-          <View style={styles.graphContainer}>
-            <LineChart
-              data={{
-                labels: chartData.labels,
-                datasets: [{ data: chartData.data }],
-              }}
-              width={Dimensions.get("window").width * 0.8}
-              height={200}
-              yAxisLabel="৳"
-              yAxisSuffix=""
-              yAxisInterval={1}
-              chartConfig={chartConfig}
-              bezier
-              // renderDotContent={renderDotContent}
-              style={styles.chartStyle}
-            />
-          </View>
+          {selectedPeriodicity && chartData.data.length > 0 && (
+            <>
+              <Text style={styles.monthYearText}>
+                {new Date().toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "long",
+                })}
+              </Text>
+              <View style={styles.graphContainer}>
+                <LineChart
+                  data={{
+                    labels: chartData.labels,
+                    datasets: [{ data: chartData.data }],
+                  }}
+                  width={Dimensions.get("window").width * 0.8}
+                  height={200}
+                  yAxisLabel="৳"
+                  yAxisSuffix=""
+                  yAxisInterval={1}
+                  chartConfig={chartConfig}
+                  bezier
+                  // renderDotContent={renderDotContent}
+                  style={styles.chartStyle}
+                />
+              </View>
+            </>
+          )}
         </>
       )}
     </SafeAreaView>
@@ -260,6 +273,11 @@ const chartConfig = {
     r: "6",
     strokeWidth: "2",
     stroke: "#ffa726",
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 };
 

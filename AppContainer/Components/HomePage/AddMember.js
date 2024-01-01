@@ -115,10 +115,22 @@ function AddMember({ route }) {
 
 const styles = StyleSheet.create({
   container: {
-    maxHeight: height * 0.3,
+    // maxHeight: height * 0.3,
+    marginTop: "2%",
+    paddingTop: "3%",
+    paddingLeft: "3.5%",
+    paddingBottom: "3%",
+    borderRadius: 5,
+    flexWrap: "wrap",
+    justifyContent: "flex-start",
+
+    alignItems: "center",
+    width: "95%",
+    marginLeft: "2.5%",
+    backgroundColor: "white",
   },
   row: {
-    flex: 1,
+    // flex: 1,
     justifyContent: "flex-start",
     flexWrap: "wrap",
   },

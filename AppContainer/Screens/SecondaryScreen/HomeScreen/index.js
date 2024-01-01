@@ -1,8 +1,16 @@
 import React, { useContext, useEffect, useState, useCallback } from "react";
-import { Dimensions, SafeAreaView, StyleSheet, View, Text } from "react-native";
+import {
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+} from "react-native";
 import TopBar from "../../../SecondaryComponent/CommonComponent/TopBar.js";
 import { globalStyle } from "../../../utils/globalStyle.js";
 import PeriodicityDetails from "../../../SecondaryComponent/HomePage/PeriodicityChart.js";
+import Post from "../../../Components/HomePage/Posts.js";
 import { fetchFamilyMemberDetails } from "../../../API/DailyExpenseApi.js";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
@@ -20,11 +28,27 @@ export default function Index({ route }) {
   console.log("Username on HomeScreen:", username);
 
   console.log("FamilyMemberId on HomeScreen:", familyMemberId);
+  const data = [
+    {
+      key: "PeriodicityDetails",
+      component: <PeriodicityDetails route={route} />,
+    },
+    { key: "Post", component: <Post /> },
+  ];
+
+  const renderItem = ({ item }) => <View>{item.component}</View>;
   return (
     <SafeAreaView style={[globalStyle.container, styles.container]}>
       <View>
         <TopBar route={route}></TopBar>
-        <PeriodicityDetails route={route}></PeriodicityDetails>
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.key}
+          style={styles.flatListContainer}
+          showsVerticalScrollIndicator={false}
+        />
+        {/* <PeriodicityDetails route={route}></PeriodicityDetails> */}
         {/* <TopBar route={route}></TopBar>
         <View style={styles.addMember}>
           <AllAddMember route={route}></AllAddMember>
@@ -34,6 +58,8 @@ export default function Index({ route }) {
     </SafeAreaView>
   );
 }
+
+// Render Item for FlatList
 
 const styles = StyleSheet.create({
   container: {
