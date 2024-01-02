@@ -14,7 +14,7 @@ export const fetchAllExpenseDetails = async (userId) => {
     if (error.message === "HTTP error! status: 500") {
       return;
     }
-    console.error("Fetching error:", error);
+    console.log("Fetching error:", error);
     throw error;
   }
 };
@@ -64,7 +64,7 @@ export const updateExpense = async (expenseID, expenseToUpdate) => {
 
     return await response.json();
   } catch (error) {
-    console.error("Could not update the expense", error);
+    console.log("Could not update the expense", error);
     throw error;
   }
 };

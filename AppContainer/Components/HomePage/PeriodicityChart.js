@@ -7,7 +7,10 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
+  Alert,
 } from "react-native";
+
+import NetInfo from "@react-native-community/netinfo";
 import { LineChart } from "react-native-chart-kit";
 import { fetchDailyExpenses } from "../../API/DailyExpenseApi";
 import { useFocusEffect } from "@react-navigation/native";
@@ -16,45 +19,61 @@ const PeriodicityDetails = ({ route }) => {
   const { userId } = route.params;
   const [selectedPeriodicity, setSelectedPeriodicity] = useState("Daily");
   const [chartData, setChartData] = useState({ labels: [], data: [] });
+  const [error, setError] = useState(null);
   // const [showDotsLabel, setShowDotsLabel] = useState(false);
+
+  const fetchExpenses = async () => {
+    try {
+      const fetchedData = await fetchDailyExpenses(userId);
+      if (!fetchedData) {
+        throw new Error("No data returned from the request.");
+      }
+      let processedData;
+      if (selectedPeriodicity === "Monthly") {
+        processedData = processMonthlyExpenses(fetchedData);
+      } else if (selectedPeriodicity === "Weekly") {
+        processedData = processWeeklyExpenses(fetchedData);
+      } else {
+        fetchedData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        const labels = fetchedData.map((item) =>
+          new Date(item.date).getDate().toString()
+        );
+        const expenses = fetchedData.map((item) => item.dailyExpense);
+
+        const expenseDifferences = expenses.map((current, index, array) => {
+          if (index === 0) return current;
+          return current;
+        });
+
+        processedData = {
+          labels,
+          data: expenseDifferences,
+          // dailyDifferences: ,
+        };
+
+        console.log(processedData);
+      }
+      setChartData(processedData);
+    } catch (error) {
+      // If an error occurs, log it and update the state with setError
+      // console.error("Error fetching data:", error);
+      setError(error.message || "An unexpected error occurred.");
+    }
+  };
   useFocusEffect(
     useCallback(() => {
-      const fetchExpenses = async () => {
-        try {
-          const fetchedData = await fetchDailyExpenses(userId);
-          let processedData;
-          if (selectedPeriodicity === "Monthly") {
-            processedData = processMonthlyExpenses(fetchedData);
-          } else if (selectedPeriodicity === "Weekly") {
-            processedData = processWeeklyExpenses(fetchedData);
-          } else {
-            fetchedData.sort((a, b) => new Date(a.date) - new Date(b.date));
-            const labels = fetchedData.map((item) =>
-              new Date(item.date).getDate().toString()
-            );
-            const expenses = fetchedData.map((item) => item.dailyExpense);
+      const unsubscribe = NetInfo.addEventListener((state) => {
+        if (state.isConnected) {
+          setError(null); // Clear any existing errors when connected
 
-            const expenseDifferences = expenses.map((current, index, array) => {
-              if (index === 0) return current;
-              return current;
-            });
-
-            processedData = {
-              labels,
-              data: expenseDifferences,
-              // dailyDifferences: ,
-            };
-
-            console.log(processedData);
-          }
-          setChartData(processedData);
-        } catch (error) {
-          console.error("Error fetching data:", error);
+          fetchExpenses();
+        } else {
+          setError("No internet connection. Please connect and try again."); // Make sure to set the error
         }
-      };
-
+      });
       fetchExpenses();
-      return () => {};
+
+      return () => unsubscribe();
     }, [userId, selectedPeriodicity])
   );
   const processMonthlyExpenses = (fetchedData) => {
@@ -181,32 +200,42 @@ const PeriodicityDetails = ({ route }) => {
           </TouchableOpacity>
         ))}
       </View>
-      {selectedPeriodicity && chartData.data.length > 0 && (
-        <>
-          <Text style={styles.monthYearText}>
-            {new Date().toLocaleDateString(undefined, {
-              year: "numeric",
-              month: "long",
-            })}
-          </Text>
-          <View style={styles.graphContainer}>
-            <LineChart
-              data={{
-                labels: chartData.labels,
-                datasets: [{ data: chartData.data }],
-              }}
-              width={Dimensions.get("window").width * 0.8}
-              height={200}
-              yAxisLabel="৳"
-              yAxisSuffix=""
-              yAxisInterval={1}
-              chartConfig={chartConfig}
-              bezier
-              // renderDotContent={renderDotContent}
-              style={styles.chartStyle}
-            />
-          </View>
-        </>
+      {error ? (
+        // If there is an error, display the error message
+        <View style={styles.centered}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      ) : (
+        // If there is no error, display the FlatList with your data
+        selectedPeriodicity &&
+        chartData.data.length > 0 && (
+          <>
+            <Text style={styles.monthYearText}>
+              {new Date().toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "long",
+              })}
+            </Text>
+            <View style={styles.graphContainer}>
+              <LineChart
+                data={{
+                  labels: chartData.labels,
+                  datasets: [{ data: chartData.data }],
+                }}
+                width={Dimensions.get("window").width * 0.8}
+                height={200}
+                yAxisLabel="৳"
+                yAxisSuffix=""
+                yAxisInterval={1}
+                chartConfig={chartConfig}
+                bezier
+                // renderDotContent={renderDotContent}
+                style={styles.chartStyle}
+              />
+            </View>
+            {/* Your FlatList should go here */}
+          </>
+        )
       )}
     </SafeAreaView>
   );
@@ -223,6 +252,11 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     padding: 20,
     borderRadius: 5,
+  },
+  errorText: {
+    color: "red",
+    fontSize: 16,
+    margin: 20,
   },
   // dotLabel: {
   //   position: "absolute",

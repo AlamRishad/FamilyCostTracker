@@ -1,11 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, SafeAreaView, StyleSheet, View, Text } from "react-native";
+import {
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+} from "react-native";
 import TopBar from "../../Components/CommonComponent/TopBar";
 import AllAddMember from "../../Components/HomePage/AddMember";
 import PeriodicityDetails from "../../Components/HomePage/PeriodicityChart.js";
 import ShowAllExpense from "../../Components/ExpensesScreenComponent/AllExpensesCategory.js";
 import { globalStyle } from "../../utils/globalStyle.js";
 
+import NetInfo from "@react-native-community/netinfo";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -14,6 +22,20 @@ export default function Index({ route }) {
   const userId = route.params.userId;
   console.log(userId);
   console.log(userId + "homescreen" + route);
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (!state.isConnected) {
+        Alert.alert(
+          "No Internet Connection",
+          "Please check your internet connection."
+        );
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   return (
     <SafeAreaView style={[globalStyle.container, styles.container]}>
       <View>

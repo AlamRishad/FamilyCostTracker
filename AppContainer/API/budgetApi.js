@@ -9,7 +9,7 @@ export const fetchAllBudgetDetails = async (userId) => {
     // console.log(data);
     return data;
   } catch (error) {
-    console.error("Fetching error:", error);
+    console.log("Fetching error:", error);
     throw error;
   }
 };

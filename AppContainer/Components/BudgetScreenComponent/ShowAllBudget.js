@@ -105,7 +105,7 @@ const ShowAllBudgetDetails = ({ route }) => {
       if (error.message === "Property 'log' doesn't exist") {
         fetchBudgetDetails();
       } else {
-        console.error("Failed to save budget detail: ", error);
+        console.log("Failed to save budget detail: ", error);
       }
     }
   };
@@ -381,7 +381,7 @@ const ShowAllBudgetDetails = ({ route }) => {
       const groupedBudgetDetails = groupByFamilyMember(response);
       setBudgetDetails(groupedBudgetDetails);
     } catch (error) {
-      console.error("An error occurred while fetching budget details", error);
+      console.log("An error occurred while fetching budget details", error);
     } finally {
       setIsLoading(false);
     }
@@ -401,7 +401,7 @@ const ShowAllBudgetDetails = ({ route }) => {
         setBudgetDetails(groupedBudgetDetails);
         //console.log(groupedBudgetDetails);
       } catch (error) {
-        console.error("An error occurred while fetching budget details", error);
+        console.log("An error occurred while fetching budget details", error);
       } finally {
         setIsLoading(false);
       }

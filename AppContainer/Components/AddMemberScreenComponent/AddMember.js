@@ -60,19 +60,18 @@ const Dropdown = ({ options, onSelect, route }) => {
         navigation.goBack();
       })
       .catch((error) => {
-        if (
-          error ==
+        if (error.message.includes("Network request failed")) {
+          setErrorMessage(
+            "Unable to connect. Please check your internet connection."
+          );
+        } else if (
+          error.message ===
           "Error: A family member with the same name already exists for this user."
         ) {
-          setErrorMessage("This family member already exist.");
+          setErrorMessage("This family member already exists.");
         } else {
-          if (
-            error == "SyntaxError: JSON Parse error: Unexpected character: F"
-          ) {
-            navigation.goBack();
-          } else {
-            console.error("Failed to create family member:", error);
-          }
+          // console.error("Failed to create family member:", error);
+          setErrorMessage("An error occurred while adding the family member.");
         }
       });
   };

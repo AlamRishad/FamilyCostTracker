@@ -22,7 +22,7 @@ export const login = async (email, password) => {
       return { success: false, message: responseBody.message };
     }
   } catch (error) {
-    console.error("Error:", error);
+    console.log("Error:", error);
     return {
       success: false,
       message: "An error occurred. Please try again later.",
@@ -55,7 +55,7 @@ export const secondaryLogin = async (email, username) => {
       return { success: false, message: textResponse || "No content" };
     }
   } catch (error) {
-    console.error("Error:", error);
+    console.log("Error:", error);
     return {
       success: false,
       message: "An error occurred. Please try again later.",

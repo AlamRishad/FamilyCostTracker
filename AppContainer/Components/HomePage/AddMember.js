@@ -8,6 +8,7 @@ import {
   FlatList,
 } from "react-native";
 import Icon from "react-native-vector-icons/AntDesign";
+import NetInfo from "@react-native-community/netinfo";
 import Icon2 from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { getFamilyMembersByUserId } from "../../API/getAllUser";
@@ -21,23 +22,42 @@ function AddMember({ route }) {
   const [familyMembers, setFamilyMembers] = useState([]);
   const { userId } = route.params;
 
-  const fetchFamilyMembers = () => {
-    setIsLoading(true);
-    getFamilyMembersByUserId(userId)
-      .then((data) => {
-        setFamilyMembers(data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err.toString());
-        setIsLoading(false);
-      });
-  };
+  const fetchFamilyMembers = useCallback(() => {
+    let isActive = true;
+
+    NetInfo.fetch().then((state) => {
+      if (state.isConnected) {
+        setIsLoading(true);
+        getFamilyMembersByUserId(userId)
+          .then((data) => {
+            if (isActive) {
+              setError(null);
+              setFamilyMembers(data);
+              setIsLoading(false);
+            }
+          })
+          .catch((err) => {
+            if (isActive) {
+              setError(`An error occurred: ${err.message || err.toString()}`);
+              setIsLoading(false);
+            }
+          });
+      } else {
+        setError("No internet connection. Please connect and try again.");
+      }
+    });
+
+    return () => {
+      isActive = false;
+    };
+  }, [userId]);
 
   useFocusEffect(
     useCallback(() => {
       fetchFamilyMembers();
-      return () => {};
+      return () => {
+        isActive = false;
+      };
     }, [userId])
   );
 
@@ -85,30 +105,35 @@ function AddMember({ route }) {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={[{ key: "addMemberButton" }, ...familyMembers]}
-        renderItem={({ item }) => {
-          if (item.key === "addMemberButton") {
-            return (
-              <TouchableOpacity
-                style={[styles.buttonContainer, styles.addMemberButton]}
-                onPress={handleAddMemberPress}
-              >
-                <Icon name="plus" size={20} color="#fff" />
-                <Text style={styles.textStyle}>Add Member</Text>
-              </TouchableOpacity>
-            );
-          } else {
-            return renderMemberItem({ item });
-          }
-        }}
-        keyExtractor={(item, index) => item.key || index.toString()}
-        numColumns={Math.floor(width / (width * 0.2 + 6))}
-        columnWrapperStyle={styles.row}
-      />
-
       {isLoading && <Text>Loading family members...</Text>}
-      {error && <Text style={styles.error}>{error}</Text>}
+
+      {error ? (
+        // Display the error message if there is an error
+        <Text style={styles.error}>{error}</Text>
+      ) : (
+        // Render the FlatList if there is no error
+        <FlatList
+          data={[{ key: "addMemberButton" }, ...familyMembers]}
+          renderItem={({ item }) => {
+            if (item.key === "addMemberButton") {
+              return (
+                <TouchableOpacity
+                  style={[styles.buttonContainer, styles.addMemberButton]}
+                  onPress={handleAddMemberPress}
+                >
+                  <Icon name="plus" size={20} color="#fff" />
+                  <Text style={styles.textStyle}>Add Member</Text>
+                </TouchableOpacity>
+              );
+            } else {
+              return renderMemberItem({ item });
+            }
+          }}
+          keyExtractor={(item, index) => item.key || index.toString()}
+          numColumns={Math.floor(width / (width * 0.2 + 6))}
+          columnWrapperStyle={styles.row}
+        />
+      )}
     </View>
   );
 }

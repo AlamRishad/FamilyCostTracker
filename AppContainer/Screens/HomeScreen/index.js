@@ -7,6 +7,7 @@ import {
   Text,
   ScrollView,
   FlatList,
+  Alert,
 } from "react-native";
 import TopBar from "../../Components/CommonComponent/TopBar";
 import AllAddMember from "../../Components/HomePage/AddMember";
@@ -14,6 +15,7 @@ import PeriodicityDetails from "../../Components/HomePage/PeriodicityChart.js";
 import Post from "../../Components/HomePage/Posts.js";
 import { globalStyle } from "../../utils/globalStyle.js";
 
+import NetInfo from "@react-native-community/netinfo";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -21,6 +23,20 @@ export default function Index({ route }) {
   // const userId = route.params.userId;
   const userId = route.params.userId;
   console.log(userId + "homescreen" + route);
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      if (!state.isConnected) {
+        Alert.alert(
+          "No Internet Connection",
+          "Please check your internet connection."
+        );
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
   const data = [
     { key: "AddMember", component: <AllAddMember route={route} /> },
     {

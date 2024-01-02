@@ -6,7 +6,7 @@ export const fetchPosts = async () => {
     //  console.log(data);
     return data;
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    console.log("Error fetching posts:", error);
     throw error;
   }
 };

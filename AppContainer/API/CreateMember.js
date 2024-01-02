@@ -56,7 +56,7 @@ export const fetchFamilyMemberDetails = async (userId, familyMemberName) => {
     const data = await response.json();
     return { success: true, data };
   } catch (error) {
-    console.error("Error fetching family member details:", error);
+    console.log("Error fetching family member details:", error);
     return { success: false, error: error.message };
   }
 };

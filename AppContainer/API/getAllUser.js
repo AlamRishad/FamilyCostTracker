@@ -9,7 +9,7 @@ export const getAllUsers = async () => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Fetching error:", error);
+    console.log("Fetching error:", error);
     throw error;
   }
 };
@@ -22,7 +22,7 @@ export const getFamilyMembersByUserId = async (userId) => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Failed to fetch family members", error);
+    console.log("Failed to fetch family members", error);
   }
 };
 
@@ -34,7 +34,7 @@ export const getFamilyMemberDetails = async (familyMemberID) => {
     let responseJson = await response.json();
     return responseJson;
   } catch (error) {
-    console.error(error);
+    console.log(error);
   }
 };
 
@@ -54,7 +54,7 @@ export const getCategoriesByFamilyMember = async (familyMemberID) => {
     const categories = await response.json();
     return categories;
   } catch (error) {
-    console.error(error);
+    console.log(error);
     throw error;
   }
 };
@@ -73,7 +73,7 @@ export const fetchUserDetails = async (userId) => {
     console.log("User details:", user);
     return user;
   } catch (error) {
-    console.error("Error fetching user:", error);
+    console.log("Error fetching user:", error);
     throw error;
   }
 };

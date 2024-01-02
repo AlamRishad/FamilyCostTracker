@@ -36,9 +36,7 @@ const Profile = () => {
           setBudgetDetails(data);
           calculateTotalAmount(data);
         })
-        .catch((error) =>
-          console.error("Error fetching budget details:", error)
-        );
+        .catch((error) => console.log("Error fetching budget details:", error));
 
       return () => {};
     }, [userId])
@@ -53,7 +51,7 @@ const Profile = () => {
           calculateTotalAmount2(data);
         })
         .catch((error) =>
-          console.error("Error fetching expense details:", error)
+          console.log("Error fetching expense details:", error)
         );
 
       return () => {};
@@ -66,7 +64,7 @@ const Profile = () => {
           console.log(data);
           setUserName(data.username);
         })
-        .catch((error) => console.error("Error fetching user details:", error));
+        .catch((error) => console.log("Error fetching user details:", error));
 
       return () => {};
     }, [userId])
