@@ -23,6 +23,8 @@ const Dropdown = ({ options, onSelect, route }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [userType, setUserType] = useState("primary");
 
+  const [password, setPassword] = useState("");
+
   const toggleDropdown = () => {
     Animated.timing(animatedHeight, {
       toValue: isOpen ? 0 : options.length * 5,
@@ -52,9 +54,13 @@ const Dropdown = ({ options, onSelect, route }) => {
       setErrorMessage("Please select a relationship option.");
       return;
     }
+    if (!password && userType === "secondary") {
+      setErrorMessage("Please Enter a password.");
+      return;
+    }
     console.log("Submitting form...");
 
-    createFamilyMember(fullName, selectedOption, userId, userType)
+    createFamilyMember(fullName, selectedOption, userId, userType, password)
       .then((responseText) => {
         console.log("Family member created:", responseText);
         navigation.goBack();
@@ -71,71 +77,96 @@ const Dropdown = ({ options, onSelect, route }) => {
           setErrorMessage("This family member already exists.");
         } else {
           // console.error("Failed to create family member:", error);
+          if (
+            error == "SyntaxError: JSON Parse error: Unexpected character: F"
+          ) {
+            // console.log("Family member created:", responseText);
+            navigation.goBack();
+          }
           setErrorMessage("An error occurred while adding the family member.");
         }
       });
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.header}>Add your family member's details</Text>
-      <TextInput
-        placeholder="Full name"
-        value={fullName}
-        onChangeText={setFullName}
-        style={styles.input}
-      />
+    <>
+      <ScrollView style={styles.container}>
+        <Text style={styles.header}>Add your family member's details</Text>
+        <TextInput
+          placeholder="Full name"
+          value={fullName}
+          onChangeText={setFullName}
+          style={styles.input}
+        />
+        <>
+          {userType === "secondary" ? (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter your password "
+              onChangeText={setPassword}
+              value={password}
+              secureTextEntry={true}
+              // secureTextEntry={true}
+            />
+          ) : null}
+        </>
+        <TouchableOpacity style={styles.input} onPress={toggleDropdown}>
+          <Text style={styles.headerText}>
+            {selectedOption || "Select a relationship..."}
+          </Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.input} onPress={toggleDropdown}>
-        <Text style={styles.headerText}>
-          {selectedOption || "Select a relationship..."}
-        </Text>
-      </TouchableOpacity>
+        {isOpen && (
+          <Animated.View style={[styles.dropdown, { height: animatedHeight }]}>
+            <ScrollView nestedScrollEnabled={true}>
+              {options.map((option, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.option}
+                  onPress={() => onOptionPress(option)}
+                >
+                  <Text style={styles.optionText}>{option}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </Animated.View>
+        )}
 
-      {isOpen && (
-        <Animated.View style={[styles.dropdown, { height: animatedHeight }]}>
-          <ScrollView nestedScrollEnabled={true}>
-            {options.map((option, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.option}
-                onPress={() => onOptionPress(option)}
-              >
-                <Text style={styles.optionText}>{option}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </Animated.View>
-      )}
+        <View style={styles.maincheckboxContainer}>
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              title="Primary user"
+              checked={userType === "primary"}
+              onPress={() => {
+                setUserType("primary");
+                setErrorMessage(null);
+              }}
+              containerStyle={styles.checkbox}
+              textStyle={styles.label}
+            />
+          </View>
 
-      <View style={styles.maincheckboxContainer}>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            title="Primary user"
-            checked={userType === "primary"}
-            onPress={() => setUserType("primary")}
-            containerStyle={styles.checkbox}
-            textStyle={styles.label}
-          />
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              title="Secondary user"
+              checked={userType === "secondary"}
+              onPress={() => {
+                setUserType("secondary");
+                setErrorMessage(null);
+              }}
+              containerStyle={styles.checkbox}
+              textStyle={styles.label}
+            />
+          </View>
         </View>
-
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            title="Secondary user"
-            checked={userType === "secondary"}
-            onPress={() => setUserType("secondary")}
-            containerStyle={styles.checkbox}
-            textStyle={styles.label}
-          />
-        </View>
-      </View>
-      {errorMessage !== "" && (
-        <Text style={styles.errorMessage}>{errorMessage}</Text>
-      )}
-      <TouchableOpacity style={styles.loginBtn} onPress={addFamilyMember}>
-        <Text style={styles.buttonText}>Add Member</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        {errorMessage !== "" && (
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+        )}
+        <TouchableOpacity style={styles.loginBtn} onPress={addFamilyMember}>
+          <Text style={styles.buttonText}>Add Member</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </>
   );
 };
 

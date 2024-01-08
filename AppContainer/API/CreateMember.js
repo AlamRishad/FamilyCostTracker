@@ -3,7 +3,8 @@ export const createFamilyMember = async (
   name,
   relationship,
   userId,
-  userType
+  userType,
+  FamilyPassword
 ) => {
   console.log(userId);
   try {
@@ -17,6 +18,7 @@ export const createFamilyMember = async (
         Relationship: relationship,
         UserID: userId,
         AccountType: userType,
+        familyPassword: FamilyPassword,
       }),
     });
 

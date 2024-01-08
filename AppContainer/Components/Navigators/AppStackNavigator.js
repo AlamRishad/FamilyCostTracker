@@ -19,6 +19,8 @@ import EditPasswordScreen from "../../Screens/EditPasswordScreen";
 import EditEmailScreen from "../../Screens/EditEmailScreen";
 import SecondaryBottomTabNavigator from "./SecondaryBottomTabNavigator";
 import SecondaryProfile from "../../Screens/SecondaryScreen/SecondaryProfileScreen";
+import EditPasswordScreenSecondary from "../../Screens/SecondaryScreen/EditPasswordScreenSecondary";
+
 const Stack = createNativeStackNavigator();
 export default function AppStackNavigator() {
   return (
@@ -59,6 +61,10 @@ export default function AppStackNavigator() {
       <Stack.Screen name="EditUserNameScreen" component={EditUserNameScreen} />
       <Stack.Screen name="EditPasswordScreen" component={EditPasswordScreen} />
       <Stack.Screen name="EditEmailScreen" component={EditEmailScreen} />
+      <Stack.Screen
+        name="EditPasswordScreenSecondary"
+        component={EditPasswordScreenSecondary}
+      />
     </Stack.Navigator>
   );
 }

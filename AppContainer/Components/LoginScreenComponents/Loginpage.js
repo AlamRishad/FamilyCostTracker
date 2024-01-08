@@ -37,8 +37,21 @@ const Loginpage = () => {
 
   const handleLoginPress = async () => {
     console.log(userType);
+
+    if (!email.trim()) {
+      setErrorMessage("Please enter a valid email address.");
+      return;
+    }
+    if (!password) {
+      setErrorMessage("Password is required.");
+      return;
+    }
     if (userType == "secondary") {
-      const result = await secondaryLogin(email, username);
+      if (!username.trim()) {
+        setErrorMessage("Username is required.");
+        return;
+      }
+      const result = await secondaryLogin(email, username, password);
       if (result.success) {
         console.log("Response Body:", result.body);
         const userId = result.body.userId;
@@ -121,7 +134,7 @@ const Loginpage = () => {
       <ScrollView
         contentContainerStyle={[
           styles.container,
-          { minHeight: windowHeight * (keyboardStatus ? 1.5 : 1.1) },
+          { minHeight: windowHeight * (keyboardStatus ? 1.5 : 1.15) },
         ]}
         ref={scrollViewRef}
       >
@@ -139,7 +152,10 @@ const Loginpage = () => {
             <CheckBox
               title="Primary user"
               checked={userType === "primary"}
-              onPress={() => setUserType("primary")}
+              onPress={() => {
+                setUserType("primary");
+                setErrorMessage(null);
+              }}
               containerStyle={styles.checkbox}
               textStyle={styles.label}
             />
@@ -149,7 +165,10 @@ const Loginpage = () => {
             <CheckBox
               title="Secondary user"
               checked={userType === "secondary"}
-              onPress={() => setUserType("secondary")}
+              onPress={() => {
+                setUserType("secondary");
+                setErrorMessage(null);
+              }}
               containerStyle={styles.checkbox}
               textStyle={styles.label}
             />
@@ -162,28 +181,7 @@ const Loginpage = () => {
           value={email}
         />
 
-        {userType === "primary" ? (
-          <TextInput
-            onLayout={(event) => {
-              const layout = event.nativeEvent.layout;
-              setPasswordX(layout.x);
-              setPasswordY(layout.y);
-            }}
-            style={styles.input}
-            placeholder="Enter your password "
-            onChangeText={setPassword}
-            value={password}
-            secureTextEntry={true}
-            onFocus={() => {
-              scrollViewRef.current.scrollTo({
-                x: passwordX,
-                y: passwordY,
-                animated: true,
-              });
-            }}
-            // secureTextEntry={true}
-          />
-        ) : (
+        {userType === "secondary" ? (
           <TextInput
             onLayout={(event) => {
               const layout = event.nativeEvent.layout;
@@ -203,7 +201,27 @@ const Loginpage = () => {
               });
             }}
           />
-        )}
+        ) : null}
+        <TextInput
+          onLayout={(event) => {
+            const layout = event.nativeEvent.layout;
+            setPasswordX(layout.x);
+            setPasswordY(layout.y);
+          }}
+          style={styles.input}
+          placeholder="Enter your password "
+          onChangeText={setPassword}
+          value={password}
+          secureTextEntry={true}
+          onFocus={() => {
+            scrollViewRef.current.scrollTo({
+              x: passwordX,
+              y: passwordY,
+              animated: true,
+            });
+          }}
+          // secureTextEntry={true}
+        />
         {errorMessage ? (
           <Text style={styles.errorMessage}>{errorMessage}</Text>
         ) : null}

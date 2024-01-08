@@ -7,17 +7,19 @@ import {
   Text,
   Alert,
 } from "react-native";
-import TopBar from "../../Components/CommonComponent/TopBar.js";
-import AllAddMember from "../../Components/HomePage/AddMember.js";
-import EditPassword from "../../Components/EditPasswordScreenComponent/EditPassword.js";
+// import TopBar from "../../Components/CommonComponent/TopBar.js";
+// import AllAddMember from "../../Components/HomePage/AddMember.js";
+import EditPassword from "../../../SecondaryComponent/EditPasswordScreenComponent/EditPassword.js";
 
 import NetInfo from "@react-native-community/netinfo";
-import { globalStyle } from "../../utils/globalStyle.js";
+import { globalStyle } from "../../../utils/globalStyle.js";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
-export default function Index() {
+export default function Index({ route }) {
+  const { userId, familyMemberId, username } = route.params;
+  console.log(userId, familyMemberId, username + "profile");
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       if (!state.isConnected) {
@@ -35,7 +37,7 @@ export default function Index() {
   return (
     <SafeAreaView style={[globalStyle.container, styles.container]}>
       <View>
-        <EditPassword></EditPassword>
+        <EditPassword route={route}></EditPassword>
       </View>
     </SafeAreaView>
   );

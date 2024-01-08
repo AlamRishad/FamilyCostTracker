@@ -29,15 +29,15 @@ export const login = async (email, password) => {
     };
   }
 };
-export const secondaryLogin = async (email, username) => {
+export const secondaryLogin = async (email, username, password) => {
   console.log(email, username);
   try {
     const response = await fetch(
-      `${API_URL}/SecondaryLogin?userEmail=${email}&familyMemberName=${username}`,
+      `${API_URL}/SecondaryLogin?userEmail=${email}&familyMemberName=${username}&familyPassword=${password}`,
       {
         method: "POST",
         headers: {
-          Accept: "application/json", // Expecting JSON in response
+          Accept: "application/json",
         },
       }
     );
@@ -231,5 +231,43 @@ export const deleteUser = async (userId) => {
   } catch (error) {
     console.error("Error during user deletion:", error);
     throw error;
+  }
+};
+
+export const updateSecondaryPassword = async (
+  userId,
+  familyMemberId,
+  oldPasswordHash,
+  newPasswordHash
+) => {
+  console.log(userId + " " + oldPasswordHash + " " + newPasswordHash);
+  try {
+    const response = await fetch(
+      `${API_URL}/api/FamilyMember/UpdateUserPassword/${userId}?familyUserId=${familyMemberId}&oldPasswordHash=${oldPasswordHash}&newPasswordHash=${newPasswordHash}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          UserId: userId,
+          oldPasswordHash: oldPasswordHash,
+          newPasswordHash: newPasswordHash,
+        }),
+      }
+    );
+
+    if (response.ok) {
+      const message = await response.text();
+      return { success: true, message };
+    } else {
+      const errorData = await response.text();
+      return {
+        success: false,
+        message: errorData || "Failed to update the username",
+      };
+    }
+  } catch (error) {
+    return { success: false, message: error.toString() };
   }
 };

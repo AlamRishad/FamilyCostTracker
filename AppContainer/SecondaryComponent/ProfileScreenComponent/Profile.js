@@ -18,6 +18,9 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Alert } from "react-native";
 const Profile = ({ route }) => {
   const { userId, familyMemberId, username } = route.params;
+  console.log(
+    userId + " fam " + familyMemberId + " user" + username + "secondaryProfile"
+  );
   const [budgetDetails, setBudgetDetails] = useState([]);
   const [totalAmount, setTotalAmount] = useState(0);
 
@@ -134,7 +137,25 @@ const Profile = ({ route }) => {
             </View>
           </View>
         </View>
+        <View style={styles.generalSection}>
+          <Text style={styles.generalText2}>Edit Profile</Text>
 
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("EditPasswordScreenSecondary", {
+                userId: userId,
+                username: username,
+                familyMemberId: familyMemberId,
+              });
+            }}
+            style={styles.generalView}
+          >
+            <Text style={styles.generalText}>Edit Password</Text>
+            <View tyle={styles.generalIcon}>
+              <Icon name="chevron-right" size={25} color="#000" />
+            </View>
+          </TouchableOpacity>
+        </View>
         <View style={styles.generalSection}>
           <Text style={styles.generalText2}>General</Text>
           <TouchableOpacity
