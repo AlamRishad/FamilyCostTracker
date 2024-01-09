@@ -22,6 +22,7 @@ const PeriodicityDetails = ({ route }) => {
   const [selectedPeriodicity, setSelectedPeriodicity] = useState("Daily");
   const [chartData, setChartData] = useState({ labels: [], data: [] });
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   useFocusEffect(
     useCallback(() => {
       const fetchExpenses = async () => {
@@ -52,13 +53,14 @@ const PeriodicityDetails = ({ route }) => {
               data: expenseDifferences,
               // dailyDifferences: ,
             };
-
+            setError(null);
             console.log(processedData);
           }
           setChartData(processedData);
           setIsLoading(false);
         } catch (error) {
-          console.error("Error fetching data:", error);
+          //console.error("Error fetching data:", error);
+          setError(error.message || "An unexpected error occurred.");
         }
       };
 
@@ -70,7 +72,7 @@ const PeriodicityDetails = ({ route }) => {
     if (result.success) {
       console.log("Family member details:", result.data);
     } else {
-      console.error("Failed to fetch family member details:", result.error);
+      console.log("Failed to fetch family member details:", result.error);
     }
   });
 
@@ -134,42 +136,42 @@ const PeriodicityDetails = ({ route }) => {
           </TouchableOpacity>
         ))}
       </View>
-      {isLoading ? (
-        <ActivityIndicator
-          size="large"
-          color="#0000ff"
-          style={styles.loading}
-        />
+      {error ? (
+        // If there is an error, display the error message
+        <View style={styles.centered}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
       ) : (
-        <>
-          {selectedPeriodicity && chartData.data.length > 0 && (
-            <>
-              <Text style={styles.monthYearText}>
-                {new Date().toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "long",
-                })}
-              </Text>
-              <View style={styles.graphContainer}>
-                <LineChart
-                  data={{
-                    labels: chartData.labels,
-                    datasets: [{ data: chartData.data }],
-                  }}
-                  width={Dimensions.get("window").width * 0.8}
-                  height={200}
-                  yAxisLabel="৳"
-                  yAxisSuffix=""
-                  yAxisInterval={1}
-                  chartConfig={chartConfig}
-                  bezier
-                  // renderDotContent={renderDotContent}
-                  style={styles.chartStyle}
-                />
-              </View>
-            </>
-          )}
-        </>
+        // If there is no error, display the FlatList with your data
+        selectedPeriodicity &&
+        chartData.data.length > 0 && (
+          <>
+            <Text style={styles.monthYearText}>
+              {new Date().toLocaleDateString(undefined, {
+                year: "numeric",
+                month: "long",
+              })}
+            </Text>
+            <View style={styles.graphContainer}>
+              <LineChart
+                data={{
+                  labels: chartData.labels,
+                  datasets: [{ data: chartData.data }],
+                }}
+                width={Dimensions.get("window").width * 0.8}
+                height={200}
+                yAxisLabel="৳"
+                yAxisSuffix=""
+                yAxisInterval={1}
+                chartConfig={chartConfig}
+                bezier
+                // renderDotContent={renderDotContent}
+                style={styles.chartStyle}
+              />
+            </View>
+            {/* Your FlatList should go here */}
+          </>
+        )
       )}
     </SafeAreaView>
   );

@@ -33,7 +33,11 @@ const ShowAllexpenseDetails = ({ route }) => {
     setIsModalVisible(true);
   };
   const updateExpenseDetails = async () => {
-    const currentDate = new Date().toISOString().split("T")[0];
+    const currentDateTime = new Date();
+    currentDateTime.setHours(currentDateTime.getHours() + 6);
+
+    const formattedDateTime = currentDateTime.toISOString();
+    console.log(formattedDateTime);
 
     const newExpenseAmount =
       parseFloat(selectedCategory.expenseAmount || 0) + parseFloat(inputAmount);
@@ -45,7 +49,7 @@ const ShowAllexpenseDetails = ({ route }) => {
       categoryID: selectedCategory.categoryID,
       expenseAmount: amountValue,
       description: "Not needed",
-      date: currentDate,
+      date: formattedDateTime,
       familyMemberID: selectedCategory.familyMemberID,
       periodicity: selectedCategory.periodicity,
     };

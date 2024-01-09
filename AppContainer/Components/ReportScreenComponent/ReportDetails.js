@@ -44,9 +44,25 @@ const ReportDetails = ({ route }) => {
       ]}
       onPress={() => setSelectedIndex(index)} // Set the selected index
     >
-      <Text style={styles.detailText}>{item.expenseID}</Text>
+      <Text style={styles.detailText}>
+        {new Date(item.date).toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "short",
+          year: "2-digit",
+        })}
+      </Text>
+
+      <Text style={styles.detailText}>
+        {new Date(item.date).toLocaleTimeString("en-US", {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        })}
+      </Text>
+
       <Text style={styles.detailText}>{item.categoryName}</Text>
       <Text style={styles.detailText}>{item.familyMemberName}</Text>
+
       <Text style={styles.detailText}>{item.differenceFromPreviousRow}</Text>
     </TouchableOpacity>
   );
@@ -55,9 +71,12 @@ const ReportDetails = ({ route }) => {
     <View style={styles.container}>
       <Text style={styles.header}>Transection Details</Text>
       <View style={styles.itemHeader}>
-        <Text style={styles.itemHeaderText}>T.ID</Text>
+        <Text style={styles.itemHeaderText}>Date</Text>
+
+        <Text style={styles.itemHeaderText}>TIME</Text>
         <Text style={styles.itemHeaderText}>C.Name</Text>
         <Text style={styles.itemHeaderText}>F.Name</Text>
+
         <Text style={styles.itemHeaderText}>T.Amount</Text>
       </View>
       {isLoading ? (

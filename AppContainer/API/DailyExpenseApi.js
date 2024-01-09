@@ -3,7 +3,7 @@ import { API_URL } from "./config";
 export const fetchDailyExpenses = async (userId) => {
   try {
     const response = await fetch(
-      `${API_URL}/api/DailyExpenses/GetDailyExpenses/${userId}`,
+      `${API_URL}/api/DailyExpenses/GetDailyExpenses2/${userId}`,
       {
         method: "GET",
         headers: {
@@ -29,7 +29,7 @@ export const fetchDailyExpenses = async (userId) => {
 export const fetchDailyExpensesByMember = async (userId, familyMemberID) => {
   try {
     const response = await fetch(
-      `${API_URL}/api/DailyExpenses/GetByUserAndFamilyMember/${userId}/${familyMemberID}`,
+      `${API_URL}/api/DailyExpenses/GetByUserAndFamilyMember2/${userId}/${familyMemberID}`,
       {
         method: "GET",
         headers: {
