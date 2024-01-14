@@ -1,6 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { CardStyleInterpolators } from "@react-navigation/stack";
-import React from "react";
+import React, { useEffect } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
 import LoginScreen from "../../Screens/LoginScreen";
 import BottomTabNavigator from "./BottomTabNavigator";
 import Profile from "../../Screens/ProfileScreen";
@@ -22,6 +24,51 @@ import SecondaryProfile from "../../Screens/SecondaryScreen/SecondaryProfileScre
 import EditPasswordScreenSecondary from "../../Screens/SecondaryScreen/EditPasswordScreenSecondary";
 
 const Stack = createNativeStackNavigator();
+function SplashScreen({ navigation }) {
+  useEffect(() => {
+    checkAsyncStorage();
+  }, []);
+
+  const checkAsyncStorage = async () => {
+    try {
+      // Get all keys and values from AsyncStorage
+      const allKeys = await AsyncStorage.getAllKeys();
+      if (allKeys.length > 0) {
+        const allValues = await AsyncStorage.multiGet(allKeys);
+        allValues.forEach(([key, value]) => {
+          console.log(`${key}: ${value}`);
+        });
+      }
+
+      const userIdValue = await AsyncStorage.getItem("userId");
+      const familyMemberId = await AsyncStorage.getItem("familyMemberId");
+      const username = await AsyncStorage.getItem("username");
+      console.log("userId:", userIdValue, "ashce2");
+
+      if (familyMemberId === "0" && userIdValue !== null) {
+        navigation.navigate("MainApp", { userId: userIdValue });
+        // navigation.replace("MainApp");
+      } else if (familyMemberId !== null) {
+        navigation.navigate("SecondaryMainApp", {
+          userId: userIdValue,
+          username: username,
+          familyMemberId: familyMemberId,
+        });
+      } else {
+        navigation.replace("LoginScreen");
+      }
+    } catch (error) {
+      console.error("Error reading AsyncStorage:", error);
+    }
+  };
+
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <ActivityIndicator size="large" />
+      <Text>Loading...</Text>
+    </View>
+  );
+}
 export default function AppStackNavigator() {
   return (
     <Stack.Navigator
@@ -33,6 +80,7 @@ export default function AppStackNavigator() {
         cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
       }}
     >
+      <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="MainApp" component={BottomTabNavigator} />
       <Stack.Screen

@@ -120,11 +120,14 @@ const ShowAllexpenseDetails = ({ route }) => {
 
   const groupByFamilyMember = (expenseDetails, userId) => {
     const grouped = {};
-
+    //console.log(expenseDetails);
     expenseDetails.forEach((detail) => {
+      // console.log(familyMemberId);
       // Check if the familyMemberID is equal to the given userId
-      if (detail.familyMemberID === familyMemberId) {
+      if (detail.familyMemberID == familyMemberId) {
+        console.log("1");
         if (!grouped[detail.familyMemberID]) {
+          console.log("1");
           grouped[detail.familyMemberID] = {
             familyMemberID: detail.familyMemberID,
             name: detail.familyMemberName,
@@ -158,7 +161,9 @@ const ShowAllexpenseDetails = ({ route }) => {
     try {
       const response = await fetchAllExpenseDetails(userId);
       const groupedexpenseDetails = groupByFamilyMember(response);
+      //console.log(groupedexpenseDetails);
       setexpenseDetails(groupedexpenseDetails);
+      // console.log(expenseDetails);
     } catch (error) {
       setErrorMessage("Please Add Category");
       // setError("Please Add Category");

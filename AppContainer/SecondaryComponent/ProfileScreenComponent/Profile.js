@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -77,7 +78,7 @@ const Profile = ({ route }) => {
 
   const calculateTotalAmount = (data) => {
     const total = data.reduce((acc, item) => {
-      if (item.familyMemberID === familyMemberId) {
+      if (item.familyMemberID == familyMemberId) {
         // console.log(`FamilyID1: ${item.familyMemberID} + ${familyMemberId}`);
         return acc + parseFloat(item.amount || 0);
       }
@@ -201,8 +202,19 @@ const Profile = ({ route }) => {
                   },
                   {
                     text: "Logout",
-                    onPress: () => {
-                      navigation.navigate("LoginScreen");
+                    onPress: async () => {
+                      // This will not work because you can't declare async here directly
+                      try {
+                        await AsyncStorage.multiRemove([
+                          "userId",
+                          "username",
+                          "familyMemberId",
+                        ]);
+                        // Assuming navigation is passed down as a prop or via context
+                        navigation.navigate("LoginScreen");
+                      } catch (error) {
+                        console.error("Error clearing AsyncStorage:", error);
+                      }
                     },
                   },
                 ],

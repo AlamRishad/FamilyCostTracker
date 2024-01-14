@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -110,6 +111,11 @@ const Profile = () => {
           onPress: async () => {
             try {
               const response = await deleteUser(userId);
+              await AsyncStorage.multiRemove([
+                "userId",
+                "username",
+                "familyMemberId",
+              ]);
               navigation.navigate("LoginScreen");
               alert(response); // Or any other notification method
             } catch (error) {
@@ -229,8 +235,19 @@ const Profile = () => {
                   },
                   {
                     text: "Logout",
-                    onPress: () => {
-                      navigation.navigate("LoginScreen");
+                    onPress: async () => {
+                      // This will not work because you can't declare async here directly
+                      try {
+                        await AsyncStorage.multiRemove([
+                          "userId",
+                          "username",
+                          "familyMemberId",
+                        ]);
+                        // Assuming navigation is passed down as a prop or via context
+                        navigation.navigate("LoginScreen");
+                      } catch (error) {
+                        console.error("Error clearing AsyncStorage:", error);
+                      }
                     },
                   },
                 ],

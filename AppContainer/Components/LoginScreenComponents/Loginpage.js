@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useState, useEffect, useRef } from "react";
 import {
   Dimensions,
@@ -64,6 +65,12 @@ const Loginpage = () => {
         console.log(
           userId + "Secondary login page" + username + "Id:  " + familyMemberId
         );
+        await AsyncStorage.multiSet([
+          ["userId", userId.toString()],
+          ["username", username],
+          ["familyMemberId", familyMemberId.toString()],
+        ]);
+
         navigation.navigate("SecondaryMainApp", {
           userId: userId,
           username: username,
@@ -78,6 +85,12 @@ const Loginpage = () => {
         console.log("Response Body:", result.body);
         const userId = result.body.userId;
         console.log(userId + "login page");
+        await AsyncStorage.multiSet([
+          ["userId", userId.toString()],
+          ["username", "0"],
+          ["familyMemberId", "0"],
+        ]);
+
         navigation.navigate("MainApp", { userId: userId });
         setEmail("");
         setPassword("");
