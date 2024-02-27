@@ -1,0 +1,195 @@
+-- Table: Bills
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE TABLE [FamilyCostTracker].[dbo].[Bills](
+    [BillID] [int] IDENTITY(1,1) NOT NULL,
+    [UserID] [int] NULL,
+    [CategoryID] [int] NULL,
+    [Amount] [decimal](10, 2) NOT NULL,
+    [DueDate] [date] NOT NULL,
+    [IsPaid] [bit] NULL,
+    PRIMARY KEY CLUSTERED 
+    (
+        [BillID] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY];
+
+-- Table: Budgets
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE TABLE [FamilyCostTracker].[dbo].[Budgets](
+    [BudgetID] [int] IDENTITY(1,1) NOT NULL,
+    [UserID] [int] NULL,
+    [CategoryID] [int] NULL,
+    [Amount] [decimal](10, 2) NOT NULL,
+    [StartDate] [date] NOT NULL,
+    [EndDate] [date] NOT NULL,
+    [Periodicity] [varchar](10) NULL,
+    [FamilyMemberID] [int] NULL,
+    PRIMARY KEY CLUSTERED 
+    (
+        [BudgetID] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY];
+
+-- Table: Categories
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE TABLE [FamilyCostTracker].[dbo].[Categories](
+    [CategoryID] [int] IDENTITY(1,1) NOT NULL,
+    [Name] [varchar](255) NOT NULL,
+    [UserID] [int] NULL,
+    [FamilyMemberID] [int] NULL,
+    PRIMARY KEY CLUSTERED 
+    (
+        [CategoryID] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY];
+
+-- Table: Expenses
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE TABLE [FamilyCostTracker].[dbo].[Expenses](
+    [ExpenseID] [int] IDENTITY(1,1) NOT NULL,
+    [UserID] [int] NULL,
+    [CategoryID] [int] NULL,
+    [ExpenseAmount] [decimal](10, 2) NOT NULL,
+    [Description] [text] NULL,
+    [Date] [datetime] NULL,
+    [FamilyMemberID] [int] NULL,
+    [Periodicity] [varchar](10) NULL,
+    PRIMARY KEY CLUSTERED 
+    (
+        [ExpenseID] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+-- Table: FamilyMember
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE TABLE [FamilyCostTracker].[dbo].[FamilyMember](
+    [FamilyMemberID] [int] IDENTITY(1,1) NOT NULL,
+    [Name] [varchar](255) NULL,
+    [Relationship] [varchar](255) NULL,
+    [UserID] [int] NULL,
+    [AccountType] [varchar](50) NULL,
+    [familyPassword] [varchar](255) NULL,
+    PRIMARY KEY CLUSTERED 
+    (
+        [FamilyMemberID] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY];
+
+-- Table: PeriodicSummary
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE TABLE [FamilyCostTracker].[dbo].[PeriodicSummary](
+    [SummaryID] [int] NOT NULL,
+    [UserID] [int] NULL,
+    [Periodicity] [varchar](10) NULL,
+    [StartDate] [date] NULL,
+    [EndDate] [date] NULL,
+    [TotalExpense] [decimal](10, 2) NULL,
+    [TotalBudget] [decimal](10, 2) NULL,
+    PRIMARY KEY CLUSTERED 
+    (
+        [SummaryID] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY];
+
+-- Table: Posts
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE TABLE [FamilyCostTracker].[dbo].[Posts](
+    [PostID] [int] IDENTITY(1,1) NOT NULL,
+    [UserID] [int] NOT NULL,
+    [Title] [varchar](255) NULL,
+    [Content] [varchar](max) NULL,
+    [CategoryID] [int] NULL,
+    [Timestamp] [datetime] NULL,
+    [LikesCount] [int] NULL,
+    [CommentsCount] [int] NULL,
+    [Attachments] [varchar](max) NULL,
+    [Status] [varchar](50) NULL,
+    [Tags] [varchar](255) NULL,
+    [Visibility] [varchar](50) NULL,
+    PRIMARY KEY CLUSTERED 
+    (
+        [PostID] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+-- Table: Users
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE TABLE [FamilyCostTracker].[dbo].[Users](
+    [UserID] [int] IDENTITY(1,1) NOT NULL,
+    [Username] [varchar](255) NOT NULL,
+    [PasswordHash] [varchar](255) NOT NULL,
+    [Email] [varchar](255) NOT NULL,
+    [CreatedAt] [datetime] NULL,
+    PRIMARY KEY CLUSTERED 
+    (
+        [UserID] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+    UNIQUE NONCLUSTERED 
+    (
+        [Email] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+    UNIQUE NONCLUSTERED 
+    (
+        [Email] ASC
+    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY];
+
+-- Default Constraints
+ALTER TABLE [FamilyCostTracker].[dbo].[Bills] ADD  DEFAULT ((0)) FOR [IsPaid];
+ALTER TABLE [FamilyCostTracker].[dbo].[Budgets] ADD  DEFAULT ('Monthly') FOR [Periodicity];
+ALTER TABLE [FamilyCostTracker].[dbo].[Expenses] ADD  DEFAULT ('Monthly') FOR [Periodicity];
+ALTER TABLE [FamilyCostTracker].[dbo].[Posts] ADD  DEFAULT (getdate()) FOR [Timestamp];
+ALTER TABLE [FamilyCostTracker].[dbo].[Posts] ADD  DEFAULT ((0)) FOR [LikesCount];
+ALTER TABLE [FamilyCostTracker].[dbo].[Posts] ADD  DEFAULT ((0)) FOR [CommentsCount];
+ALTER TABLE [FamilyCostTracker].[dbo].[Users] ADD  DEFAULT (getdate()) FOR [CreatedAt];
+
+-- Check Constraints
+ALTER TABLE [FamilyCostTracker].[dbo].[Budgets]  WITH CHECK ADD  CONSTRAINT [CHK_Periodicity2] CHECK  (([Periodicity]='Monthly' OR [Periodicity]='Weekly' OR [Periodicity]='Daily'));
+ALTER TABLE [FamilyCostTracker].[dbo].[Budgets] CHECK CONSTRAINT [CHK_Periodicity2];
+ALTER TABLE [FamilyCostTracker].[dbo].[Expenses]  WITH CHECK ADD  CONSTRAINT [CHK_Periodicity] CHECK  (([Periodicity]='Monthly' OR [Periodicity]='Weekly' OR [Periodicity]='Daily'));
+ALTER TABLE [FamilyCostTracker].[dbo].[Expenses] CHECK CONSTRAINT [CHK_Periodicity];
+
+-- Stored Procedure: GetExpensesByUserAndFamilyMember
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
+CREATE PROCEDURE [FamilyCostTracker].[dbo].[GetExpensesByUserAndFamilyMember]
+    @UserID INT,
+    @FamilyMemberID INT
+AS
+BEGIN
+    WITH RankedExpenses AS (
+        SELECT
+            ExpenseID,
+            UserID,
+            FamilyMemberID,
+            CategoryID,
+            ExpenseAmount,
+            [Date],
+            ROW_NUMBER() OVER (
+                PARTITION BY UserID, FamilyMemberID, CategoryID, [Date] 
+                ORDER BY ExpenseID DESC
+            ) AS rn
+        FROM [FamilyCostTracker].[dbo].[Expenses]
+        WHERE UserID = @UserID AND FamilyMemberID = @FamilyMemberID
+    )
+    SELECT
+        UserID,
+        FamilyMemberID,
+        [Date],
+        YEAR([Date]) AS [Year],
+        MONTH([Date]) AS [Month],
+        DATEPART(week, [Date]) AS [Week],
+        SUM(ExpenseAmount) AS TotalExpense
+    FROM RankedExpenses
+    WHERE rn = 1
+    GROUP BY UserID, FamilyMemberID, [Date]
+    ORDER BY [Date];
+END;

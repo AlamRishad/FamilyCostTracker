@@ -11,9 +11,6 @@ import TopBar from "../../../SecondaryComponent/CommonComponent/TopBar.js";
 import { globalStyle } from "../../../utils/globalStyle.js";
 import PeriodicityDetails from "../../../SecondaryComponent/HomePage/PeriodicityChart.js";
 import Post from "../../../Components/HomePage/Posts.js";
-import { fetchFamilyMemberDetails } from "../../../API/DailyExpenseApi.js";
-import { useFocusEffect } from "@react-navigation/native";
-import { useRoute } from "@react-navigation/native";
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 

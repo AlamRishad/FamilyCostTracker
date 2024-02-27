@@ -1,0 +1,225 @@
+USE [FamilyCostTracker]
+GO
+/****** Object:  Table [dbo].[Bills]    Script Date: 2/27/2024 3:42:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Bills](
+	[BillID] [int] IDENTITY(1,1) NOT NULL,
+	[UserID] [int] NULL,
+	[CategoryID] [int] NULL,
+	[Amount] [decimal](10, 2) NOT NULL,
+	[DueDate] [date] NOT NULL,
+	[IsPaid] [bit] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[BillID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Budgets]    Script Date: 2/27/2024 3:42:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Budgets](
+	[BudgetID] [int] IDENTITY(1,1) NOT NULL,
+	[UserID] [int] NULL,
+	[CategoryID] [int] NULL,
+	[Amount] [decimal](10, 2) NOT NULL,
+	[StartDate] [date] NOT NULL,
+	[EndDate] [date] NOT NULL,
+	[Periodicity] [varchar](10) NULL,
+	[FamilyMemberID] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[BudgetID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Categories]    Script Date: 2/27/2024 3:42:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Categories](
+	[CategoryID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](255) NOT NULL,
+	[UserID] [int] NULL,
+	[FamilyMemberID] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[CategoryID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Expenses]    Script Date: 2/27/2024 3:42:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Expenses](
+	[ExpenseID] [int] IDENTITY(1,1) NOT NULL,
+	[UserID] [int] NULL,
+	[CategoryID] [int] NULL,
+	[ExpenseAmount] [decimal](10, 2) NOT NULL,
+	[Description] [text] NULL,
+	[Date] [datetime] NULL,
+	[FamilyMemberID] [int] NULL,
+	[Periodicity] [varchar](10) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ExpenseID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[FamilyMember]    Script Date: 2/27/2024 3:42:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[FamilyMember](
+	[FamilyMemberID] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [varchar](255) NULL,
+	[Relationship] [varchar](255) NULL,
+	[UserID] [int] NULL,
+	[AccountType] [varchar](50) NULL,
+	[familyPassword] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[FamilyMemberID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[PeriodicSummary]    Script Date: 2/27/2024 3:42:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PeriodicSummary](
+	[SummaryID] [int] NOT NULL,
+	[UserID] [int] NULL,
+	[Periodicity] [varchar](10) NULL,
+	[StartDate] [date] NULL,
+	[EndDate] [date] NULL,
+	[TotalExpense] [decimal](10, 2) NULL,
+	[TotalBudget] [decimal](10, 2) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[SummaryID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Posts]    Script Date: 2/27/2024 3:42:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Posts](
+	[PostID] [int] IDENTITY(1,1) NOT NULL,
+	[UserID] [int] NOT NULL,
+	[Title] [varchar](255) NULL,
+	[Content] [varchar](max) NULL,
+	[CategoryID] [int] NULL,
+	[Timestamp] [datetime] NULL,
+	[LikesCount] [int] NULL,
+	[CommentsCount] [int] NULL,
+	[Attachments] [varchar](max) NULL,
+	[Status] [varchar](50) NULL,
+	[Tags] [varchar](255) NULL,
+	[Visibility] [varchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[PostID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Users]    Script Date: 2/27/2024 3:42:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Users](
+	[UserID] [int] IDENTITY(1,1) NOT NULL,
+	[Username] [varchar](255) NOT NULL,
+	[PasswordHash] [varchar](255) NOT NULL,
+	[Email] [varchar](255) NOT NULL,
+	[CreatedAt] [datetime] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[UserID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[Email] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY],
+UNIQUE NONCLUSTERED 
+(
+	[Email] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Bills] ADD  DEFAULT ((0)) FOR [IsPaid]
+GO
+ALTER TABLE [dbo].[Budgets] ADD  DEFAULT ('Monthly') FOR [Periodicity]
+GO
+ALTER TABLE [dbo].[Expenses] ADD  DEFAULT ('Monthly') FOR [Periodicity]
+GO
+ALTER TABLE [dbo].[Posts] ADD  DEFAULT (getdate()) FOR [Timestamp]
+GO
+ALTER TABLE [dbo].[Posts] ADD  DEFAULT ((0)) FOR [LikesCount]
+GO
+ALTER TABLE [dbo].[Posts] ADD  DEFAULT ((0)) FOR [CommentsCount]
+GO
+ALTER TABLE [dbo].[Users] ADD  DEFAULT (getdate()) FOR [CreatedAt]
+GO
+ALTER TABLE [dbo].[Budgets]  WITH CHECK ADD  CONSTRAINT [CHK_Periodicity2] CHECK  (([Periodicity]='Monthly' OR [Periodicity]='Weekly' OR [Periodicity]='Daily'))
+GO
+ALTER TABLE [dbo].[Budgets] CHECK CONSTRAINT [CHK_Periodicity2]
+GO
+ALTER TABLE [dbo].[Expenses]  WITH CHECK ADD  CONSTRAINT [CHK_Periodicity] CHECK  (([Periodicity]='Monthly' OR [Periodicity]='Weekly' OR [Periodicity]='Daily'))
+GO
+ALTER TABLE [dbo].[Expenses] CHECK CONSTRAINT [CHK_Periodicity]
+GO
+ALTER TABLE [dbo].[PeriodicSummary]  WITH CHECK ADD CHECK  (([Periodicity]='Monthly' OR [Periodicity]='Weekly' OR [Periodicity]='Daily'))
+GO
+/****** Object:  StoredProcedure [dbo].[GetExpensesByUserAndFamilyMember]    Script Date: 2/27/2024 3:42:42 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[GetExpensesByUserAndFamilyMember]
+    @UserID INT,
+    @FamilyMemberID INT
+AS
+BEGIN
+    WITH RankedExpenses AS (
+        SELECT
+            ExpenseID,
+            UserID,
+            FamilyMemberID,
+            CategoryID,
+            ExpenseAmount,
+            Date,
+            ROW_NUMBER() OVER (
+                PARTITION BY UserID, FamilyMemberID, CategoryID, Date 
+                ORDER BY ExpenseID DESC
+            ) AS rn
+        FROM Expenses
+        WHERE UserID = @UserID AND FamilyMemberID = @FamilyMemberID
+    )
+    SELECT
+        UserID,
+        FamilyMemberID,
+        Date,
+        YEAR(Date) AS Year,
+        MONTH(Date) AS Month,
+        DATEPART(week, Date) AS Week,
+        SUM(ExpenseAmount) AS TotalExpense
+    FROM RankedExpenses
+    WHERE rn = 1
+    GROUP BY UserID, FamilyMemberID, Date
+    ORDER BY Date;
+END
+GO
